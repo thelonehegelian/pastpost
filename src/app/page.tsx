@@ -7,9 +7,6 @@ import LandingPage from "../components/LandingPage";
 export function Page() {
   return (
     <>
-      {
-        /* <h1>wagmi + Next.js + Foundry</h1>
-
       <Connect />
 
       <Connected>
@@ -18,9 +15,7 @@ export function Page() {
         <Counter />
         <hr />
         <NetworkSwitcher />
-      </Connected> */
-      }
-      <LandingPage />
+      </Connected>
     </>
   );
 }
