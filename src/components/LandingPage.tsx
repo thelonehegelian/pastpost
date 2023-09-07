@@ -7,8 +7,7 @@ const LandingPage: React.FC = () => {
     <div
       className="h-screen w-full bg-center bg-cover"
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1661626753732-f9f5dfd1fc16')",
+       
         backgroundColor: "rgba(0, 0, 0, 1)",
       }}
     >
