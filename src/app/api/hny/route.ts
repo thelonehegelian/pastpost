@@ -11,6 +11,7 @@ interface HappyNewYearNFT {
   senderAddress?: string;
 }
 
+const validateTransactionDetails = (txDetails: HappyNewYearNFT) => {}
 const createTransactionDetailsToSend = (txDetails: HappyNewYearNFT) => {
   
   // @todo create the transaction
@@ -21,7 +22,7 @@ return txDetails;
 
 export async function POST(request: Request) {
   const { message, owner, unlockDate } = await request.json();
-
+  console.log("message", message);
 
 const txDetails = createTransactionDetailsToSend({ message, owner, unlockDate });
 
@@ -34,5 +35,5 @@ const txDetails = createTransactionDetailsToSend({ message, owner, unlockDate })
 //  return the transaction receipt
 //  return the transaction status
 //  send user success message
-return NextResponse.json({ message: "error", success: false });
+return NextResponse.json({ message: "I am working", success: false });
 }
