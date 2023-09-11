@@ -54,8 +54,10 @@ export default function MessageForm() {
 
       if (response.ok) {
         // Success
+        // TODO wait for txReceipt from the server
       } else {
         // Error
+        // TODO if there are errors display them clearly
       }
     } catch (error) {
       console.error(error);
