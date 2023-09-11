@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 
+// TODO move to types folder
 interface HappyNewYearNFT {
   nftTitle: string;
   message: string;
   owner: string;
+  receiverAddress: string;
   unlockDate: string;
-  senderName: string;
-  senderAddress: string;
+  senderName?: string;
+  senderAddress?: string;
 }
 
 const createTransactionDetailsToSend = (txDetails: HappyNewYearNFT) => {

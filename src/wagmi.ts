@@ -1,23 +1,18 @@
-import { configureChains, createConfig } from 'wagmi'
-import { foundry, goerli, mainnet } from 'wagmi/chains'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { configureChains, createConfig } from 'wagmi';
+import { foundry, goerli, mainnet } from 'wagmi/chains';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
-import { publicProvider } from 'wagmi/providers/public'
+import { publicProvider } from 'wagmi/providers/public';
 
-const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || ''
+const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    mainnet,
-    ...(process.env.NODE_ENV === 'development' ? [goerli, foundry] : []),
-  ],
-  [
-    publicProvider(),
-  ],
-)
+  [mainnet, ...(process.env.NODE_ENV === 'development' ? [goerli, foundry] : [])],
+  [publicProvider()],
+);
 
 export const config = createConfig({
   autoConnect: true,
@@ -45,4 +40,4 @@ export const config = createConfig({
   ],
   publicClient,
   webSocketPublicClient,
-})
+});

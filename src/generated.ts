@@ -10,12 +10,8 @@ import {
   UsePrepareContractWriteConfig,
   useContractEvent,
   UseContractEventConfig,
-} from 'wagmi'
-import {
-  ReadContractResult,
-  WriteContractMode,
-  PrepareWriteContractResult,
-} from 'wagmi/actions'
+} from 'wagmi';
+import { ReadContractResult, WriteContractMode, PrepareWriteContractResult } from 'wagmi/actions';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Counter
@@ -63,7 +59,7 @@ export const counterABI = [
     name: 'setNumber',
     outputs: [],
   },
-] as const
+] as const;
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x1A61839Eb5fC6eBBcAe01eD5E79062E598792Dac)
@@ -74,7 +70,7 @@ export const counterAddress = {
   1: '0x1A61839Eb5fC6eBBcAe01eD5E79062E598792Dac',
   5: '0x78991BB1D194C1235fe285240af8489CFA552151',
   31337: '0xbe18A1B61ceaF59aEB6A9bC81AB4FB87D56Ba167',
-} as const
+} as const;
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x1A61839Eb5fC6eBBcAe01eD5E79062E598792Dac)
@@ -84,7 +80,7 @@ export const counterAddress = {
 export const counterConfig = {
   address: counterAddress,
   abi: counterABI,
-} as const
+} as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC165
@@ -98,7 +94,7 @@ export const erc165ABI = [
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC721
@@ -286,7 +282,7 @@ export const erc721ABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC165
@@ -300,7 +296,7 @@ export const ierc165ABI = [
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC721
@@ -459,7 +455,7 @@ export const ierc721ABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC721Metadata
@@ -639,7 +635,7 @@ export const ierc721MetadataABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC721Receiver
@@ -658,7 +654,7 @@ export const ierc721ReceiverABI = [
     name: 'onERC721Received',
     outputs: [{ name: '', internalType: 'bytes4', type: 'bytes4' }],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TimeCapsule
@@ -866,7 +862,7 @@ export const timeCapsuleABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -888,13 +884,13 @@ export function useCounterRead<
     'abi' | 'address'
   > & { chainId?: keyof typeof counterAddress } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractRead({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     ...config,
-  } as UseContractReadConfig<typeof counterABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof counterABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -913,14 +909,14 @@ export function useCounterNumber<
     'abi' | 'address' | 'functionName'
   > & { chainId?: keyof typeof counterAddress } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractRead({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     functionName: 'number',
     ...config,
-  } as UseContractReadConfig<typeof counterABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof counterABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -942,18 +938,18 @@ export function useCounterWrite<
         TMode
       > & { address?: Address; chainId?: TChainId }
     : UseContractWriteConfig<typeof counterABI, TFunctionName, TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
+        abi?: never;
+        address?: never;
+        chainId?: TChainId;
       } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractWrite<typeof counterABI, TFunctionName, TMode>({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -969,28 +965,25 @@ export function useCounterIncrement<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof counterABI,
-          'increment'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof counterABI, 'increment'>['request']['abi'],
         'increment',
         TMode
       > & { address?: Address; chainId?: TChainId; functionName?: 'increment' }
     : UseContractWriteConfig<typeof counterABI, 'increment', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'increment'
+        abi?: never;
+        address?: never;
+        chainId?: TChainId;
+        functionName?: 'increment';
       } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractWrite<typeof counterABI, 'increment', TMode>({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     functionName: 'increment',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -1006,28 +999,25 @@ export function useCounterSetNumber<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof counterABI,
-          'setNumber'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof counterABI, 'setNumber'>['request']['abi'],
         'setNumber',
         TMode
       > & { address?: Address; chainId?: TChainId; functionName?: 'setNumber' }
     : UseContractWriteConfig<typeof counterABI, 'setNumber', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'setNumber'
+        abi?: never;
+        address?: never;
+        chainId?: TChainId;
+        functionName?: 'setNumber';
       } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractWrite<typeof counterABI, 'setNumber', TMode>({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     functionName: 'setNumber',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -1043,13 +1033,13 @@ export function usePrepareCounterWrite<TFunctionName extends string>(
     'abi' | 'address'
   > & { chainId?: keyof typeof counterAddress } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return usePrepareContractWrite({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     ...config,
-  } as UsePrepareContractWriteConfig<typeof counterABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof counterABI, TFunctionName>);
 }
 
 /**
@@ -1065,14 +1055,14 @@ export function usePrepareCounterIncrement(
     'abi' | 'address' | 'functionName'
   > & { chainId?: keyof typeof counterAddress } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return usePrepareContractWrite({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     functionName: 'increment',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof counterABI, 'increment'>)
+  } as UsePrepareContractWriteConfig<typeof counterABI, 'increment'>);
 }
 
 /**
@@ -1088,14 +1078,14 @@ export function usePrepareCounterSetNumber(
     'abi' | 'address' | 'functionName'
   > & { chainId?: keyof typeof counterAddress } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return usePrepareContractWrite({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     functionName: 'setNumber',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof counterABI, 'setNumber'>)
+  } as UsePrepareContractWriteConfig<typeof counterABI, 'setNumber'>);
 }
 
 /**
@@ -1106,18 +1096,17 @@ export function usePrepareCounterSetNumber(
  * -
  */
 export function useCounterEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof counterABI, TEventName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof counterAddress } = {} as any,
+  config: Omit<UseContractEventConfig<typeof counterABI, TEventName>, 'abi' | 'address'> & {
+    chainId?: keyof typeof counterAddress;
+  } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractEvent({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     ...config,
-  } as UseContractEventConfig<typeof counterABI, TEventName>)
+  } as UseContractEventConfig<typeof counterABI, TEventName>);
 }
 
 /**
@@ -1133,14 +1122,14 @@ export function useCounterTransferEvent(
     'abi' | 'address' | 'eventName'
   > & { chainId?: keyof typeof counterAddress } = {} as any,
 ) {
-  const { chain } = useNetwork()
-  const chainId = config.chainId ?? chain?.id
+  const { chain } = useNetwork();
+  const chainId = config.chainId ?? chain?.id;
   return useContractEvent({
     abi: counterABI,
     address: counterAddress[chainId as keyof typeof counterAddress],
     eventName: 'Transfer',
     ...config,
-  } as UseContractEventConfig<typeof counterABI, 'Transfer'>)
+  } as UseContractEventConfig<typeof counterABI, 'Transfer'>);
 }
 
 /**
@@ -1159,7 +1148,7 @@ export function useErc165Read<
     typeof erc165ABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1178,7 +1167,7 @@ export function useErc165SupportsInterface<
     abi: erc165ABI,
     functionName: 'supportsInterface',
     ...config,
-  } as UseContractReadConfig<typeof erc165ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc165ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1197,7 +1186,7 @@ export function useErc721Read<
     typeof erc721ABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1216,7 +1205,7 @@ export function useErc721BalanceOf<
     abi: erc721ABI,
     functionName: 'balanceOf',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1235,7 +1224,7 @@ export function useErc721GetApproved<
     abi: erc721ABI,
     functionName: 'getApproved',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1254,7 +1243,7 @@ export function useErc721IsApprovedForAll<
     abi: erc721ABI,
     functionName: 'isApprovedForAll',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1273,7 +1262,7 @@ export function useErc721Name<
     abi: erc721ABI,
     functionName: 'name',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1292,7 +1281,7 @@ export function useErc721OwnerOf<
     abi: erc721ABI,
     functionName: 'ownerOf',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1311,7 +1300,7 @@ export function useErc721SupportsInterface<
     abi: erc721ABI,
     functionName: 'supportsInterface',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1330,7 +1319,7 @@ export function useErc721Symbol<
     abi: erc721ABI,
     functionName: 'symbol',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1349,7 +1338,7 @@ export function useErc721TokenUri<
     abi: erc721ABI,
     functionName: 'tokenURI',
     ...config,
-  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof erc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1366,13 +1355,13 @@ export function useErc721Write<
         TMode
       >
     : UseContractWriteConfig<typeof erc721ABI, TFunctionName, TMode> & {
-        abi?: never
+        abi?: never;
       } = {} as any,
 ) {
   return useContractWrite<typeof erc721ABI, TFunctionName, TMode>({
     abi: erc721ABI,
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -1381,119 +1370,98 @@ export function useErc721Write<
 export function useErc721Approve<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc721ABI,
-          'approve'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof erc721ABI, 'approve'>['request']['abi'],
         'approve',
         TMode
       > & { functionName?: 'approve' }
     : UseContractWriteConfig<typeof erc721ABI, 'approve', TMode> & {
-        abi?: never
-        functionName?: 'approve'
+        abi?: never;
+        functionName?: 'approve';
       } = {} as any,
 ) {
   return useContractWrite<typeof erc721ABI, 'approve', TMode>({
     abi: erc721ABI,
     functionName: 'approve',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"safeTransferFrom"`.
  */
-export function useErc721SafeTransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useErc721SafeTransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc721ABI,
-          'safeTransferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof erc721ABI, 'safeTransferFrom'>['request']['abi'],
         'safeTransferFrom',
         TMode
       > & { functionName?: 'safeTransferFrom' }
     : UseContractWriteConfig<typeof erc721ABI, 'safeTransferFrom', TMode> & {
-        abi?: never
-        functionName?: 'safeTransferFrom'
+        abi?: never;
+        functionName?: 'safeTransferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof erc721ABI, 'safeTransferFrom', TMode>({
     abi: erc721ABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"setApprovalForAll"`.
  */
-export function useErc721SetApprovalForAll<
-  TMode extends WriteContractMode = undefined,
->(
+export function useErc721SetApprovalForAll<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc721ABI,
-          'setApprovalForAll'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof erc721ABI, 'setApprovalForAll'>['request']['abi'],
         'setApprovalForAll',
         TMode
       > & { functionName?: 'setApprovalForAll' }
     : UseContractWriteConfig<typeof erc721ABI, 'setApprovalForAll', TMode> & {
-        abi?: never
-        functionName?: 'setApprovalForAll'
+        abi?: never;
+        functionName?: 'setApprovalForAll';
       } = {} as any,
 ) {
   return useContractWrite<typeof erc721ABI, 'setApprovalForAll', TMode>({
     abi: erc721ABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link erc721ABI}__ and `functionName` set to `"transferFrom"`.
  */
-export function useErc721TransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useErc721TransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc721ABI,
-          'transferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof erc721ABI, 'transferFrom'>['request']['abi'],
         'transferFrom',
         TMode
       > & { functionName?: 'transferFrom' }
     : UseContractWriteConfig<typeof erc721ABI, 'transferFrom', TMode> & {
-        abi?: never
-        functionName?: 'transferFrom'
+        abi?: never;
+        functionName?: 'transferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof erc721ABI, 'transferFrom', TMode>({
     abi: erc721ABI,
     functionName: 'transferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link erc721ABI}__.
  */
 export function usePrepareErc721Write<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof erc721ABI, TFunctionName>,
-    'abi'
-  > = {} as any,
+  config: Omit<UsePrepareContractWriteConfig<typeof erc721ABI, TFunctionName>, 'abi'> = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: erc721ABI,
     ...config,
-  } as UsePrepareContractWriteConfig<typeof erc721ABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof erc721ABI, TFunctionName>);
 }
 
 /**
@@ -1509,7 +1477,7 @@ export function usePrepareErc721Approve(
     abi: erc721ABI,
     functionName: 'approve',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'approve'>)
+  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'approve'>);
 }
 
 /**
@@ -1525,7 +1493,7 @@ export function usePrepareErc721SafeTransferFrom(
     abi: erc721ABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'safeTransferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'safeTransferFrom'>);
 }
 
 /**
@@ -1541,7 +1509,7 @@ export function usePrepareErc721SetApprovalForAll(
     abi: erc721ABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'setApprovalForAll'>)
+  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'setApprovalForAll'>);
 }
 
 /**
@@ -1557,22 +1525,19 @@ export function usePrepareErc721TransferFrom(
     abi: erc721ABI,
     functionName: 'transferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'transferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof erc721ABI, 'transferFrom'>);
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link erc721ABI}__.
  */
 export function useErc721Event<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof erc721ABI, TEventName>,
-    'abi'
-  > = {} as any,
+  config: Omit<UseContractEventConfig<typeof erc721ABI, TEventName>, 'abi'> = {} as any,
 ) {
   return useContractEvent({
     abi: erc721ABI,
     ...config,
-  } as UseContractEventConfig<typeof erc721ABI, TEventName>)
+  } as UseContractEventConfig<typeof erc721ABI, TEventName>);
 }
 
 /**
@@ -1588,7 +1553,7 @@ export function useErc721ApprovalEvent(
     abi: erc721ABI,
     eventName: 'Approval',
     ...config,
-  } as UseContractEventConfig<typeof erc721ABI, 'Approval'>)
+  } as UseContractEventConfig<typeof erc721ABI, 'Approval'>);
 }
 
 /**
@@ -1604,7 +1569,7 @@ export function useErc721ApprovalForAllEvent(
     abi: erc721ABI,
     eventName: 'ApprovalForAll',
     ...config,
-  } as UseContractEventConfig<typeof erc721ABI, 'ApprovalForAll'>)
+  } as UseContractEventConfig<typeof erc721ABI, 'ApprovalForAll'>);
 }
 
 /**
@@ -1620,7 +1585,7 @@ export function useErc721TransferEvent(
     abi: erc721ABI,
     eventName: 'Transfer',
     ...config,
-  } as UseContractEventConfig<typeof erc721ABI, 'Transfer'>)
+  } as UseContractEventConfig<typeof erc721ABI, 'Transfer'>);
 }
 
 /**
@@ -1638,7 +1603,7 @@ export function useIerc165Read<
   return useContractRead({
     abi: ierc165ABI,
     ...config,
-  } as UseContractReadConfig<typeof ierc165ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc165ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1657,7 +1622,7 @@ export function useIerc165SupportsInterface<
     abi: ierc165ABI,
     functionName: 'supportsInterface',
     ...config,
-  } as UseContractReadConfig<typeof ierc165ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc165ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1675,7 +1640,7 @@ export function useIerc721Read<
   return useContractRead({
     abi: ierc721ABI,
     ...config,
-  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1694,7 +1659,7 @@ export function useIerc721BalanceOf<
     abi: ierc721ABI,
     functionName: 'balanceOf',
     ...config,
-  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1713,7 +1678,7 @@ export function useIerc721GetApproved<
     abi: ierc721ABI,
     functionName: 'getApproved',
     ...config,
-  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1732,7 +1697,7 @@ export function useIerc721IsApprovedForAll<
     abi: ierc721ABI,
     functionName: 'isApprovedForAll',
     ...config,
-  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1751,7 +1716,7 @@ export function useIerc721OwnerOf<
     abi: ierc721ABI,
     functionName: 'ownerOf',
     ...config,
-  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1770,7 +1735,7 @@ export function useIerc721SupportsInterface<
     abi: ierc721ABI,
     functionName: 'supportsInterface',
     ...config,
-  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof ierc721ABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -1787,13 +1752,13 @@ export function useIerc721Write<
         TMode
       >
     : UseContractWriteConfig<typeof ierc721ABI, TFunctionName, TMode> & {
-        abi?: never
+        abi?: never;
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721ABI, TFunctionName, TMode>({
     abi: ierc721ABI,
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -1802,119 +1767,98 @@ export function useIerc721Write<
 export function useIerc721Approve<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721ABI,
-          'approve'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721ABI, 'approve'>['request']['abi'],
         'approve',
         TMode
       > & { functionName?: 'approve' }
     : UseContractWriteConfig<typeof ierc721ABI, 'approve', TMode> & {
-        abi?: never
-        functionName?: 'approve'
+        abi?: never;
+        functionName?: 'approve';
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721ABI, 'approve', TMode>({
     abi: ierc721ABI,
     functionName: 'approve',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721ABI}__ and `functionName` set to `"safeTransferFrom"`.
  */
-export function useIerc721SafeTransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721SafeTransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721ABI,
-          'safeTransferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721ABI, 'safeTransferFrom'>['request']['abi'],
         'safeTransferFrom',
         TMode
       > & { functionName?: 'safeTransferFrom' }
     : UseContractWriteConfig<typeof ierc721ABI, 'safeTransferFrom', TMode> & {
-        abi?: never
-        functionName?: 'safeTransferFrom'
+        abi?: never;
+        functionName?: 'safeTransferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721ABI, 'safeTransferFrom', TMode>({
     abi: ierc721ABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721ABI}__ and `functionName` set to `"setApprovalForAll"`.
  */
-export function useIerc721SetApprovalForAll<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721SetApprovalForAll<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721ABI,
-          'setApprovalForAll'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721ABI, 'setApprovalForAll'>['request']['abi'],
         'setApprovalForAll',
         TMode
       > & { functionName?: 'setApprovalForAll' }
     : UseContractWriteConfig<typeof ierc721ABI, 'setApprovalForAll', TMode> & {
-        abi?: never
-        functionName?: 'setApprovalForAll'
+        abi?: never;
+        functionName?: 'setApprovalForAll';
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721ABI, 'setApprovalForAll', TMode>({
     abi: ierc721ABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721ABI}__ and `functionName` set to `"transferFrom"`.
  */
-export function useIerc721TransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721TransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721ABI,
-          'transferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721ABI, 'transferFrom'>['request']['abi'],
         'transferFrom',
         TMode
       > & { functionName?: 'transferFrom' }
     : UseContractWriteConfig<typeof ierc721ABI, 'transferFrom', TMode> & {
-        abi?: never
-        functionName?: 'transferFrom'
+        abi?: never;
+        functionName?: 'transferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721ABI, 'transferFrom', TMode>({
     abi: ierc721ABI,
     functionName: 'transferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link ierc721ABI}__.
  */
 export function usePrepareIerc721Write<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof ierc721ABI, TFunctionName>,
-    'abi'
-  > = {} as any,
+  config: Omit<UsePrepareContractWriteConfig<typeof ierc721ABI, TFunctionName>, 'abi'> = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: ierc721ABI,
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721ABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof ierc721ABI, TFunctionName>);
 }
 
 /**
@@ -1930,7 +1874,7 @@ export function usePrepareIerc721Approve(
     abi: ierc721ABI,
     functionName: 'approve',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'approve'>)
+  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'approve'>);
 }
 
 /**
@@ -1946,7 +1890,7 @@ export function usePrepareIerc721SafeTransferFrom(
     abi: ierc721ABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'safeTransferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'safeTransferFrom'>);
 }
 
 /**
@@ -1962,7 +1906,7 @@ export function usePrepareIerc721SetApprovalForAll(
     abi: ierc721ABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'setApprovalForAll'>)
+  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'setApprovalForAll'>);
 }
 
 /**
@@ -1978,22 +1922,19 @@ export function usePrepareIerc721TransferFrom(
     abi: ierc721ABI,
     functionName: 'transferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'transferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof ierc721ABI, 'transferFrom'>);
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link ierc721ABI}__.
  */
 export function useIerc721Event<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof ierc721ABI, TEventName>,
-    'abi'
-  > = {} as any,
+  config: Omit<UseContractEventConfig<typeof ierc721ABI, TEventName>, 'abi'> = {} as any,
 ) {
   return useContractEvent({
     abi: ierc721ABI,
     ...config,
-  } as UseContractEventConfig<typeof ierc721ABI, TEventName>)
+  } as UseContractEventConfig<typeof ierc721ABI, TEventName>);
 }
 
 /**
@@ -2009,7 +1950,7 @@ export function useIerc721ApprovalEvent(
     abi: ierc721ABI,
     eventName: 'Approval',
     ...config,
-  } as UseContractEventConfig<typeof ierc721ABI, 'Approval'>)
+  } as UseContractEventConfig<typeof ierc721ABI, 'Approval'>);
 }
 
 /**
@@ -2025,7 +1966,7 @@ export function useIerc721ApprovalForAllEvent(
     abi: ierc721ABI,
     eventName: 'ApprovalForAll',
     ...config,
-  } as UseContractEventConfig<typeof ierc721ABI, 'ApprovalForAll'>)
+  } as UseContractEventConfig<typeof ierc721ABI, 'ApprovalForAll'>);
 }
 
 /**
@@ -2041,7 +1982,7 @@ export function useIerc721TransferEvent(
     abi: ierc721ABI,
     eventName: 'Transfer',
     ...config,
-  } as UseContractEventConfig<typeof ierc721ABI, 'Transfer'>)
+  } as UseContractEventConfig<typeof ierc721ABI, 'Transfer'>);
 }
 
 /**
@@ -2052,22 +1993,14 @@ export function useIerc721MetadataRead<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi'
   > = {} as any,
 ) {
   return useContractRead({
     abi: ierc721MetadataABI,
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2078,11 +2011,7 @@ export function useIerc721MetadataBalanceOf<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2090,11 +2019,7 @@ export function useIerc721MetadataBalanceOf<
     abi: ierc721MetadataABI,
     functionName: 'balanceOf',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2105,11 +2030,7 @@ export function useIerc721MetadataGetApproved<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2117,11 +2038,7 @@ export function useIerc721MetadataGetApproved<
     abi: ierc721MetadataABI,
     functionName: 'getApproved',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2132,11 +2049,7 @@ export function useIerc721MetadataIsApprovedForAll<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2144,11 +2057,7 @@ export function useIerc721MetadataIsApprovedForAll<
     abi: ierc721MetadataABI,
     functionName: 'isApprovedForAll',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2159,11 +2068,7 @@ export function useIerc721MetadataName<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2171,11 +2076,7 @@ export function useIerc721MetadataName<
     abi: ierc721MetadataABI,
     functionName: 'name',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2186,11 +2087,7 @@ export function useIerc721MetadataOwnerOf<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2198,11 +2095,7 @@ export function useIerc721MetadataOwnerOf<
     abi: ierc721MetadataABI,
     functionName: 'ownerOf',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2213,11 +2106,7 @@ export function useIerc721MetadataSupportsInterface<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2225,11 +2114,7 @@ export function useIerc721MetadataSupportsInterface<
     abi: ierc721MetadataABI,
     functionName: 'supportsInterface',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2240,11 +2125,7 @@ export function useIerc721MetadataSymbol<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2252,11 +2133,7 @@ export function useIerc721MetadataSymbol<
     abi: ierc721MetadataABI,
     functionName: 'symbol',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2267,11 +2144,7 @@ export function useIerc721MetadataTokenUri<
   TSelectData = ReadContractResult<typeof ierc721MetadataABI, TFunctionName>,
 >(
   config: Omit<
-    UseContractReadConfig<
-      typeof ierc721MetadataABI,
-      TFunctionName,
-      TSelectData
-    >,
+    UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2279,11 +2152,7 @@ export function useIerc721MetadataTokenUri<
     abi: ierc721MetadataABI,
     functionName: 'tokenURI',
     ...config,
-  } as UseContractReadConfig<
-    typeof ierc721MetadataABI,
-    TFunctionName,
-    TSelectData
-  >)
+  } as UseContractReadConfig<typeof ierc721MetadataABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2295,93 +2164,68 @@ export function useIerc721MetadataWrite<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721MetadataABI,
-          string
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721MetadataABI, string>['request']['abi'],
         TFunctionName,
         TMode
       >
-    : UseContractWriteConfig<
-        typeof ierc721MetadataABI,
-        TFunctionName,
-        TMode
-      > & {
-        abi?: never
+    : UseContractWriteConfig<typeof ierc721MetadataABI, TFunctionName, TMode> & {
+        abi?: never;
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721MetadataABI, TFunctionName, TMode>({
     abi: ierc721MetadataABI,
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721MetadataABI}__ and `functionName` set to `"approve"`.
  */
-export function useIerc721MetadataApprove<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721MetadataApprove<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721MetadataABI,
-          'approve'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721MetadataABI, 'approve'>['request']['abi'],
         'approve',
         TMode
       > & { functionName?: 'approve' }
     : UseContractWriteConfig<typeof ierc721MetadataABI, 'approve', TMode> & {
-        abi?: never
-        functionName?: 'approve'
+        abi?: never;
+        functionName?: 'approve';
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721MetadataABI, 'approve', TMode>({
     abi: ierc721MetadataABI,
     functionName: 'approve',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721MetadataABI}__ and `functionName` set to `"safeTransferFrom"`.
  */
-export function useIerc721MetadataSafeTransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721MetadataSafeTransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721MetadataABI,
-          'safeTransferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721MetadataABI, 'safeTransferFrom'>['request']['abi'],
         'safeTransferFrom',
         TMode
       > & { functionName?: 'safeTransferFrom' }
-    : UseContractWriteConfig<
-        typeof ierc721MetadataABI,
-        'safeTransferFrom',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'safeTransferFrom'
+    : UseContractWriteConfig<typeof ierc721MetadataABI, 'safeTransferFrom', TMode> & {
+        abi?: never;
+        functionName?: 'safeTransferFrom';
       } = {} as any,
 ) {
-  return useContractWrite<typeof ierc721MetadataABI, 'safeTransferFrom', TMode>(
-    {
-      abi: ierc721MetadataABI,
-      functionName: 'safeTransferFrom',
-      ...config,
-    } as any,
-  )
+  return useContractWrite<typeof ierc721MetadataABI, 'safeTransferFrom', TMode>({
+    abi: ierc721MetadataABI,
+    functionName: 'safeTransferFrom',
+    ...config,
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721MetadataABI}__ and `functionName` set to `"setApprovalForAll"`.
  */
-export function useIerc721MetadataSetApprovalForAll<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721MetadataSetApprovalForAll<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
@@ -2391,55 +2235,38 @@ export function useIerc721MetadataSetApprovalForAll<
         'setApprovalForAll',
         TMode
       > & { functionName?: 'setApprovalForAll' }
-    : UseContractWriteConfig<
-        typeof ierc721MetadataABI,
-        'setApprovalForAll',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'setApprovalForAll'
+    : UseContractWriteConfig<typeof ierc721MetadataABI, 'setApprovalForAll', TMode> & {
+        abi?: never;
+        functionName?: 'setApprovalForAll';
       } = {} as any,
 ) {
-  return useContractWrite<
-    typeof ierc721MetadataABI,
-    'setApprovalForAll',
-    TMode
-  >({
+  return useContractWrite<typeof ierc721MetadataABI, 'setApprovalForAll', TMode>({
     abi: ierc721MetadataABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721MetadataABI}__ and `functionName` set to `"transferFrom"`.
  */
-export function useIerc721MetadataTransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721MetadataTransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721MetadataABI,
-          'transferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721MetadataABI, 'transferFrom'>['request']['abi'],
         'transferFrom',
         TMode
       > & { functionName?: 'transferFrom' }
-    : UseContractWriteConfig<
-        typeof ierc721MetadataABI,
-        'transferFrom',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'transferFrom'
+    : UseContractWriteConfig<typeof ierc721MetadataABI, 'transferFrom', TMode> & {
+        abi?: never;
+        functionName?: 'transferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721MetadataABI, 'transferFrom', TMode>({
     abi: ierc721MetadataABI,
     functionName: 'transferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -2454,7 +2281,7 @@ export function usePrepareIerc721MetadataWrite<TFunctionName extends string>(
   return usePrepareContractWrite({
     abi: ierc721MetadataABI,
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, TFunctionName>);
 }
 
 /**
@@ -2470,7 +2297,7 @@ export function usePrepareIerc721MetadataApprove(
     abi: ierc721MetadataABI,
     functionName: 'approve',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'approve'>)
+  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'approve'>);
 }
 
 /**
@@ -2478,10 +2305,7 @@ export function usePrepareIerc721MetadataApprove(
  */
 export function usePrepareIerc721MetadataSafeTransferFrom(
   config: Omit<
-    UsePrepareContractWriteConfig<
-      typeof ierc721MetadataABI,
-      'safeTransferFrom'
-    >,
+    UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'safeTransferFrom'>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2489,10 +2313,7 @@ export function usePrepareIerc721MetadataSafeTransferFrom(
     abi: ierc721MetadataABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof ierc721MetadataABI,
-    'safeTransferFrom'
-  >)
+  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'safeTransferFrom'>);
 }
 
 /**
@@ -2500,10 +2321,7 @@ export function usePrepareIerc721MetadataSafeTransferFrom(
  */
 export function usePrepareIerc721MetadataSetApprovalForAll(
   config: Omit<
-    UsePrepareContractWriteConfig<
-      typeof ierc721MetadataABI,
-      'setApprovalForAll'
-    >,
+    UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'setApprovalForAll'>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2511,10 +2329,7 @@ export function usePrepareIerc721MetadataSetApprovalForAll(
     abi: ierc721MetadataABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof ierc721MetadataABI,
-    'setApprovalForAll'
-  >)
+  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'setApprovalForAll'>);
 }
 
 /**
@@ -2530,22 +2345,19 @@ export function usePrepareIerc721MetadataTransferFrom(
     abi: ierc721MetadataABI,
     functionName: 'transferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'transferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof ierc721MetadataABI, 'transferFrom'>);
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link ierc721MetadataABI}__.
  */
 export function useIerc721MetadataEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof ierc721MetadataABI, TEventName>,
-    'abi'
-  > = {} as any,
+  config: Omit<UseContractEventConfig<typeof ierc721MetadataABI, TEventName>, 'abi'> = {} as any,
 ) {
   return useContractEvent({
     abi: ierc721MetadataABI,
     ...config,
-  } as UseContractEventConfig<typeof ierc721MetadataABI, TEventName>)
+  } as UseContractEventConfig<typeof ierc721MetadataABI, TEventName>);
 }
 
 /**
@@ -2561,7 +2373,7 @@ export function useIerc721MetadataApprovalEvent(
     abi: ierc721MetadataABI,
     eventName: 'Approval',
     ...config,
-  } as UseContractEventConfig<typeof ierc721MetadataABI, 'Approval'>)
+  } as UseContractEventConfig<typeof ierc721MetadataABI, 'Approval'>);
 }
 
 /**
@@ -2577,7 +2389,7 @@ export function useIerc721MetadataApprovalForAllEvent(
     abi: ierc721MetadataABI,
     eventName: 'ApprovalForAll',
     ...config,
-  } as UseContractEventConfig<typeof ierc721MetadataABI, 'ApprovalForAll'>)
+  } as UseContractEventConfig<typeof ierc721MetadataABI, 'ApprovalForAll'>);
 }
 
 /**
@@ -2593,7 +2405,7 @@ export function useIerc721MetadataTransferEvent(
     abi: ierc721MetadataABI,
     eventName: 'Transfer',
     ...config,
-  } as UseContractEventConfig<typeof ierc721MetadataABI, 'Transfer'>)
+  } as UseContractEventConfig<typeof ierc721MetadataABI, 'Transfer'>);
 }
 
 /**
@@ -2605,58 +2417,40 @@ export function useIerc721ReceiverWrite<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721ReceiverABI,
-          string
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721ReceiverABI, string>['request']['abi'],
         TFunctionName,
         TMode
       >
-    : UseContractWriteConfig<
-        typeof ierc721ReceiverABI,
-        TFunctionName,
-        TMode
-      > & {
-        abi?: never
+    : UseContractWriteConfig<typeof ierc721ReceiverABI, TFunctionName, TMode> & {
+        abi?: never;
       } = {} as any,
 ) {
   return useContractWrite<typeof ierc721ReceiverABI, TFunctionName, TMode>({
     abi: ierc721ReceiverABI,
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link ierc721ReceiverABI}__ and `functionName` set to `"onERC721Received"`.
  */
-export function useIerc721ReceiverOnErc721Received<
-  TMode extends WriteContractMode = undefined,
->(
+export function useIerc721ReceiverOnErc721Received<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof ierc721ReceiverABI,
-          'onERC721Received'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof ierc721ReceiverABI, 'onERC721Received'>['request']['abi'],
         'onERC721Received',
         TMode
       > & { functionName?: 'onERC721Received' }
-    : UseContractWriteConfig<
-        typeof ierc721ReceiverABI,
-        'onERC721Received',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'onERC721Received'
+    : UseContractWriteConfig<typeof ierc721ReceiverABI, 'onERC721Received', TMode> & {
+        abi?: never;
+        functionName?: 'onERC721Received';
       } = {} as any,
 ) {
-  return useContractWrite<typeof ierc721ReceiverABI, 'onERC721Received', TMode>(
-    {
-      abi: ierc721ReceiverABI,
-      functionName: 'onERC721Received',
-      ...config,
-    } as any,
-  )
+  return useContractWrite<typeof ierc721ReceiverABI, 'onERC721Received', TMode>({
+    abi: ierc721ReceiverABI,
+    functionName: 'onERC721Received',
+    ...config,
+  } as any);
 }
 
 /**
@@ -2671,7 +2465,7 @@ export function usePrepareIerc721ReceiverWrite<TFunctionName extends string>(
   return usePrepareContractWrite({
     abi: ierc721ReceiverABI,
     ...config,
-  } as UsePrepareContractWriteConfig<typeof ierc721ReceiverABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof ierc721ReceiverABI, TFunctionName>);
 }
 
 /**
@@ -2679,10 +2473,7 @@ export function usePrepareIerc721ReceiverWrite<TFunctionName extends string>(
  */
 export function usePrepareIerc721ReceiverOnErc721Received(
   config: Omit<
-    UsePrepareContractWriteConfig<
-      typeof ierc721ReceiverABI,
-      'onERC721Received'
-    >,
+    UsePrepareContractWriteConfig<typeof ierc721ReceiverABI, 'onERC721Received'>,
     'abi' | 'functionName'
   > = {} as any,
 ) {
@@ -2690,10 +2481,7 @@ export function usePrepareIerc721ReceiverOnErc721Received(
     abi: ierc721ReceiverABI,
     functionName: 'onERC721Received',
     ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof ierc721ReceiverABI,
-    'onERC721Received'
-  >)
+  } as UsePrepareContractWriteConfig<typeof ierc721ReceiverABI, 'onERC721Received'>);
 }
 
 /**
@@ -2711,7 +2499,7 @@ export function useTimeCapsuleRead<
   return useContractRead({
     abi: timeCapsuleABI,
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2730,7 +2518,7 @@ export function useTimeCapsuleBalanceOf<
     abi: timeCapsuleABI,
     functionName: 'balanceOf',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2749,7 +2537,7 @@ export function useTimeCapsuleCapsules<
     abi: timeCapsuleABI,
     functionName: 'capsules',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2768,7 +2556,7 @@ export function useTimeCapsuleGetApproved<
     abi: timeCapsuleABI,
     functionName: 'getApproved',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2787,7 +2575,7 @@ export function useTimeCapsuleIsApprovedForAll<
     abi: timeCapsuleABI,
     functionName: 'isApprovedForAll',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2806,7 +2594,7 @@ export function useTimeCapsuleName<
     abi: timeCapsuleABI,
     functionName: 'name',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2825,7 +2613,7 @@ export function useTimeCapsuleOwnerOf<
     abi: timeCapsuleABI,
     functionName: 'ownerOf',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2844,7 +2632,7 @@ export function useTimeCapsuleSupportsInterface<
     abi: timeCapsuleABI,
     functionName: 'supportsInterface',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2863,7 +2651,7 @@ export function useTimeCapsuleSymbol<
     abi: timeCapsuleABI,
     functionName: 'symbol',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2882,7 +2670,7 @@ export function useTimeCapsuleTokenUri<
     abi: timeCapsuleABI,
     functionName: 'tokenURI',
     ...config,
-  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof timeCapsuleABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -2894,191 +2682,150 @@ export function useTimeCapsuleWrite<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          string
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, string>['request']['abi'],
         TFunctionName,
         TMode
       >
     : UseContractWriteConfig<typeof timeCapsuleABI, TFunctionName, TMode> & {
-        abi?: never
+        abi?: never;
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, TFunctionName, TMode>({
     abi: timeCapsuleABI,
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link timeCapsuleABI}__ and `functionName` set to `"approve"`.
  */
-export function useTimeCapsuleApprove<
-  TMode extends WriteContractMode = undefined,
->(
+export function useTimeCapsuleApprove<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          'approve'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, 'approve'>['request']['abi'],
         'approve',
         TMode
       > & { functionName?: 'approve' }
     : UseContractWriteConfig<typeof timeCapsuleABI, 'approve', TMode> & {
-        abi?: never
-        functionName?: 'approve'
+        abi?: never;
+        functionName?: 'approve';
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, 'approve', TMode>({
     abi: timeCapsuleABI,
     functionName: 'approve',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link timeCapsuleABI}__ and `functionName` set to `"claimCapsule"`.
  */
-export function useTimeCapsuleClaimCapsule<
-  TMode extends WriteContractMode = undefined,
->(
+export function useTimeCapsuleClaimCapsule<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          'claimCapsule'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, 'claimCapsule'>['request']['abi'],
         'claimCapsule',
         TMode
       > & { functionName?: 'claimCapsule' }
     : UseContractWriteConfig<typeof timeCapsuleABI, 'claimCapsule', TMode> & {
-        abi?: never
-        functionName?: 'claimCapsule'
+        abi?: never;
+        functionName?: 'claimCapsule';
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, 'claimCapsule', TMode>({
     abi: timeCapsuleABI,
     functionName: 'claimCapsule',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link timeCapsuleABI}__ and `functionName` set to `"createCapsule"`.
  */
-export function useTimeCapsuleCreateCapsule<
-  TMode extends WriteContractMode = undefined,
->(
+export function useTimeCapsuleCreateCapsule<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          'createCapsule'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, 'createCapsule'>['request']['abi'],
         'createCapsule',
         TMode
       > & { functionName?: 'createCapsule' }
     : UseContractWriteConfig<typeof timeCapsuleABI, 'createCapsule', TMode> & {
-        abi?: never
-        functionName?: 'createCapsule'
+        abi?: never;
+        functionName?: 'createCapsule';
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, 'createCapsule', TMode>({
     abi: timeCapsuleABI,
     functionName: 'createCapsule',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link timeCapsuleABI}__ and `functionName` set to `"safeTransferFrom"`.
  */
-export function useTimeCapsuleSafeTransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useTimeCapsuleSafeTransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          'safeTransferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, 'safeTransferFrom'>['request']['abi'],
         'safeTransferFrom',
         TMode
       > & { functionName?: 'safeTransferFrom' }
-    : UseContractWriteConfig<
-        typeof timeCapsuleABI,
-        'safeTransferFrom',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'safeTransferFrom'
+    : UseContractWriteConfig<typeof timeCapsuleABI, 'safeTransferFrom', TMode> & {
+        abi?: never;
+        functionName?: 'safeTransferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, 'safeTransferFrom', TMode>({
     abi: timeCapsuleABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link timeCapsuleABI}__ and `functionName` set to `"setApprovalForAll"`.
  */
-export function useTimeCapsuleSetApprovalForAll<
-  TMode extends WriteContractMode = undefined,
->(
+export function useTimeCapsuleSetApprovalForAll<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          'setApprovalForAll'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, 'setApprovalForAll'>['request']['abi'],
         'setApprovalForAll',
         TMode
       > & { functionName?: 'setApprovalForAll' }
-    : UseContractWriteConfig<
-        typeof timeCapsuleABI,
-        'setApprovalForAll',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'setApprovalForAll'
+    : UseContractWriteConfig<typeof timeCapsuleABI, 'setApprovalForAll', TMode> & {
+        abi?: never;
+        functionName?: 'setApprovalForAll';
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, 'setApprovalForAll', TMode>({
     abi: timeCapsuleABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link timeCapsuleABI}__ and `functionName` set to `"transferFrom"`.
  */
-export function useTimeCapsuleTransferFrom<
-  TMode extends WriteContractMode = undefined,
->(
+export function useTimeCapsuleTransferFrom<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof timeCapsuleABI,
-          'transferFrom'
-        >['request']['abi'],
+        PrepareWriteContractResult<typeof timeCapsuleABI, 'transferFrom'>['request']['abi'],
         'transferFrom',
         TMode
       > & { functionName?: 'transferFrom' }
     : UseContractWriteConfig<typeof timeCapsuleABI, 'transferFrom', TMode> & {
-        abi?: never
-        functionName?: 'transferFrom'
+        abi?: never;
+        functionName?: 'transferFrom';
       } = {} as any,
 ) {
   return useContractWrite<typeof timeCapsuleABI, 'transferFrom', TMode>({
     abi: timeCapsuleABI,
     functionName: 'transferFrom',
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -3093,7 +2840,7 @@ export function usePrepareTimeCapsuleWrite<TFunctionName extends string>(
   return usePrepareContractWrite({
     abi: timeCapsuleABI,
     ...config,
-  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, TFunctionName>);
 }
 
 /**
@@ -3109,7 +2856,7 @@ export function usePrepareTimeCapsuleApprove(
     abi: timeCapsuleABI,
     functionName: 'approve',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'approve'>)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'approve'>);
 }
 
 /**
@@ -3125,7 +2872,7 @@ export function usePrepareTimeCapsuleClaimCapsule(
     abi: timeCapsuleABI,
     functionName: 'claimCapsule',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'claimCapsule'>)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'claimCapsule'>);
 }
 
 /**
@@ -3141,7 +2888,7 @@ export function usePrepareTimeCapsuleCreateCapsule(
     abi: timeCapsuleABI,
     functionName: 'createCapsule',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'createCapsule'>)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'createCapsule'>);
 }
 
 /**
@@ -3157,7 +2904,7 @@ export function usePrepareTimeCapsuleSafeTransferFrom(
     abi: timeCapsuleABI,
     functionName: 'safeTransferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'safeTransferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'safeTransferFrom'>);
 }
 
 /**
@@ -3173,10 +2920,7 @@ export function usePrepareTimeCapsuleSetApprovalForAll(
     abi: timeCapsuleABI,
     functionName: 'setApprovalForAll',
     ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof timeCapsuleABI,
-    'setApprovalForAll'
-  >)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'setApprovalForAll'>);
 }
 
 /**
@@ -3192,22 +2936,19 @@ export function usePrepareTimeCapsuleTransferFrom(
     abi: timeCapsuleABI,
     functionName: 'transferFrom',
     ...config,
-  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'transferFrom'>)
+  } as UsePrepareContractWriteConfig<typeof timeCapsuleABI, 'transferFrom'>);
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link timeCapsuleABI}__.
  */
 export function useTimeCapsuleEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof timeCapsuleABI, TEventName>,
-    'abi'
-  > = {} as any,
+  config: Omit<UseContractEventConfig<typeof timeCapsuleABI, TEventName>, 'abi'> = {} as any,
 ) {
   return useContractEvent({
     abi: timeCapsuleABI,
     ...config,
-  } as UseContractEventConfig<typeof timeCapsuleABI, TEventName>)
+  } as UseContractEventConfig<typeof timeCapsuleABI, TEventName>);
 }
 
 /**
@@ -3223,7 +2964,7 @@ export function useTimeCapsuleApprovalEvent(
     abi: timeCapsuleABI,
     eventName: 'Approval',
     ...config,
-  } as UseContractEventConfig<typeof timeCapsuleABI, 'Approval'>)
+  } as UseContractEventConfig<typeof timeCapsuleABI, 'Approval'>);
 }
 
 /**
@@ -3239,7 +2980,7 @@ export function useTimeCapsuleApprovalForAllEvent(
     abi: timeCapsuleABI,
     eventName: 'ApprovalForAll',
     ...config,
-  } as UseContractEventConfig<typeof timeCapsuleABI, 'ApprovalForAll'>)
+  } as UseContractEventConfig<typeof timeCapsuleABI, 'ApprovalForAll'>);
 }
 
 /**
@@ -3255,5 +2996,5 @@ export function useTimeCapsuleTransferEvent(
     abi: timeCapsuleABI,
     eventName: 'Transfer',
     ...config,
-  } as UseContractEventConfig<typeof timeCapsuleABI, 'Transfer'>)
+  } as UseContractEventConfig<typeof timeCapsuleABI, 'Transfer'>);
 }

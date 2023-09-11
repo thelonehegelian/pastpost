@@ -1,4 +1,4 @@
-import MessageForm from "../../components/landingPage/MessageForm";
+import MessageForm from '../../components/landingPage/MessageForm';
 interface MessageProps {
   text: string;
 }
