@@ -1,0 +1,35 @@
+import { NextResponse } from "next/server";
+
+interface HappyNewYearNFT {
+  nftTitle: string;
+  message: string;
+  owner: string;
+  unlockDate: string;
+  senderName: string;
+  senderAddress: string;
+}
+
+const createTransactionDetailsToSend(txDetails: HappyNewYearNFT) => {
+  // @todo create the transaction
+
+  // @todo return the transaction
+
+}
+
+export async function POST(request: Request) {
+  const { message, owner, unlockDate } = await request.json();
+
+
+const txDetails = createTransactionDetailsToSend({ message, owner, unlockDate });
+
+// @todo parse the data
+// @todo validate the data
+
+// send the data to contract
+//  wait for the transaction to be mined
+//  return the transaction hash
+//  return the transaction receipt
+//  return the transaction status
+//  send user success message
+return NextResponse.json({ message: "error", success: false });
+}
