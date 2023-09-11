@@ -9,11 +9,12 @@ interface HappyNewYearNFT {
   senderAddress: string;
 }
 
-const createTransactionDetailsToSend(txDetails: HappyNewYearNFT) => {
+const createTransactionDetailsToSend = (txDetails: HappyNewYearNFT) => {
+  
   // @todo create the transaction
 
   // @todo return the transaction
-
+return txDetails;
 }
 
 export async function POST(request: Request) {
