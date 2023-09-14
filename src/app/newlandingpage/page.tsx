@@ -52,8 +52,8 @@ export default function newlandingpage() {
         <div className="flex-1"></div>
         <div className="flex-1">
           <div className="pl-40">
-            <h1 className="text-black text-5xl pb-4">
-              The Greatest Way to Remember the Past
+            <h1 className="text-black text-5xl pb-4 font-medium">
+              The Greatest Way to remember the past
             </h1>
             <p className="text-gray-500">
               Create a time capsule for you, friend and family. You will be able to set up when and who can open this valuable chest
