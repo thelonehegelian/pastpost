@@ -2,6 +2,20 @@ import "../../../styles/landingpage.css"
 import Link from 'next/link';
 import Image from 'next/image';
 
+import { CSSProperties } from 'react';
+
+const bottomLeft: CSSProperties = {
+  position: "absolute",
+  bottom: 125,
+  left: 165,
+  zIndex: 1
+}
+
+const handClock: CSSProperties = {
+  zIndex: 2,
+  position: "relative",
+}
+
 export default function newlandingpage() {
   return (
     <><div className="container">
@@ -57,11 +71,18 @@ export default function newlandingpage() {
         </div>
       </div>
 
-      <div className="Right">
+      <div className="Right relative">
         <div className="p-20 flex justify-end">
-          <Image src="/handclock.svg" alt="handclock" width={500} height={500} />
+          <Image style={handClock} src="/handclock.svg" alt="handclock" width={500} height={500} />
+
+          <div style={bottomLeft}>
+            <Image src="/dottedSquare.svg" alt="dottedSquare" width={50} height={50} />
+          </div>
+
+        </div>
+        <div>
         </div>
       </div>
-    </div></>
+    </div ></>
   )
 }
