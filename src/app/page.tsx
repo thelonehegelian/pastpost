@@ -8,7 +8,6 @@ export function Page() {
   return (
     <>
       <Connect />
-
       <Connected>
         <Account />
         <hr />
