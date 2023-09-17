@@ -27,7 +27,10 @@ export async function POST(request: Request) {
 
   // NOTE: file path would be local to the project directory for our demo
   const responseFromLightHouse = uploadFile("path/to/file", process.env.API_KEY);
-  // TODO send response that the data was uploaded to Filecoin
-  // Note this will change the button to "Mint NFT"
+  // TODO send response that the "data was uploaded to Filecoin" + whatever the response object was
+  // TODO save the response in a json locally, we need this to create an NFT
+  // NOTE: a hacky solution for now
+
+  // NOTE: this will change the button to "Mint NFT"
   return new Response('Hello world!');
 }
