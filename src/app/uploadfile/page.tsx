@@ -18,9 +18,6 @@ export default function uploadFile(): JSX.Element {
         </div>
         <div className=" ">
           <FileUploader />
-          <button className="btn btn-outline  btn-primary absolute w-40 right-32 my-4">
-            Add Files
-          </button>
         </div>
       </div>
     </>
