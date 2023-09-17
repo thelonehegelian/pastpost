@@ -1,4 +1,13 @@
-.background{
-  background-color: #f0f0f0;
-  height: 100vh;
+.background {
+  background-color: #ffffff;
+}
+.bg-card {
+  background-color: #f2f5fc;
+}
+.text {
+  color: #637381;
+}
+.upload {
+  background-color: #e9f9ff;
+  height: 50vh;
 }

@@ -1,36 +1,36 @@
-import Image from 'next/image'
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface ChooseMediaProps {
-  img: string
-  title: string
-  description: string
-  buttonText: string
-  onClick: () => void
+  image: string;
+  title: string;
+  description: string;
+  buttonText: string;
+
+  onClick: () => void;
 }
 
-
-export default function ChooseMedia({ img, title, description, buttonText }: ChooseMediaProps): JSX.Element {
+export default function ChooseMedia({
+  image,
+  title,
+  description,
+  buttonText,
+}: ChooseMediaProps): JSX.Element {
   return (
-
-    <div className="flex h-48 w-1/2 items-center rounded-xl bg-gray-300">
-      <div className="h-full w-1/3 bg-red-500 rounded-xl">
-        <div >
-          <Image src={img} alt={img} />
-        </div>
+    <div className="flex h-56  w-4/6  rounded-l ">
+      <div className="  h-full w-96 rounded-xl">
+        <Image src={image} alt={image} />
       </div>
 
-      <div className="h-full w-1/2 flex flex-col">
-        <h1>
-
-          {title}
-        </h1>
-        <p>
-          {description}
-        </p>
-
-        <button className="btn btn-outline btn-info">{buttonText}</button>
-
+      <div className="  h-60 w-full p-6  flex flex-col bg-card">
+        <h1 className="text-2xl extra-bold my-2 ">{title}</h1>
+        <p className="text">{description}</p>
+        <Link href="/uploadfile">
+          <button className="btn btn-outline btn-primary my-auto mt-4 w-40 rounded-3xl">
+            {buttonText}
+          </button>
+        </Link>
       </div>
     </div>
-  )
+  );
 }
