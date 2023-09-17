@@ -15,6 +15,17 @@
 * 7. Tableland is queried using the same private keys to display data on the frontend
 * */
 
+/* NOTE For on-simulated solution using SDKs see the following routes:
+ * 1. uploaddata
+*  2. mintcapsule
+*  3. createtable
+ * */
+
+/*
+ * NOTE For single contract implementation see the contracts folder
+ * */
+
+
 import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   console.log(request);
