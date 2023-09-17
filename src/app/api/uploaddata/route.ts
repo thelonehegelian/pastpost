@@ -1,3 +1,9 @@
+/*
+ * The best solution to 1.uploading, 2. minting, 3. tableland table creation
+ * is to create a single entry smart contract and let it call all the write functions on lighthouse, nftFactory, and Tableland
+ *
+ * Here we take the easy but not a user-friendly way out for the Demo app
+ * */
 
 import { NextResponse } from 'next/server';
 import lighthouse from '@lighthouse-web3/sdk';
@@ -8,6 +14,11 @@ const api_key = process.env.API_KEY || '';
 const uploadFile = async (filePath: string, api_key: string | undefined) => {
   const path = filePath; // Provide the path to the file
   const apiKey = api_key
+
+  // PROBLEM: how can there be access control without the NFT address?
+  // SOLUTION: We can ignore this for the demo and just fake it 
+
+
   // Generate the API key from https://files.lighthouse.storage/ 
   //or using CLI (lighthouse-web3 api-key --new)
 
