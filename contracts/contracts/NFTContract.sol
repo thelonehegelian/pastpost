@@ -13,7 +13,7 @@ contract NFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnab
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("NFTAccess", "ACS") {}
+    constructor() ERC721("PasPostNFT", "PPN") {}
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
