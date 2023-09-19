@@ -48,29 +48,29 @@ export default function ChooseMediaPage(): JSX.Element {
             <Image src="/logo.svg" alt="Logo" width={100} height={100} />
           </div>
         </div>
-      </div>
-      <div className="">
-        <div className=" flex gap-x-20 mx-20 my-20  ">
-          {contentTypes.slice(0, 2).map((contentType) => (
-            <ChooseMedia
-              key={contentType.id}
-              image={contentType.image}
-              title={contentType.title}
-              description={contentType.description}
-              buttonText={contentType.buttonText} // Pass the buttonText here
-            />
-          ))}
-        </div>
-        <div className=" flex gap-x-20  mx-20 my-20  ">
-          {contentTypes.slice(2, 4).map((contentType) => (
-            <ChooseMedia
-              key={contentType.id}
-              image={contentType.image}
-              title={contentType.title}
-              description={contentType.description}
-              buttonText={contentType.buttonText} // Pass the buttonText here
-            />
-          ))}
+        <div className="">
+          <div className=" flex gap-x-20 mx-20 my-20  ">
+            {contentTypes.slice(0, 2).map((contentType) => (
+              <ChooseMedia
+                key={contentType.id}
+                image={contentType.image}
+                title={contentType.title}
+                description={contentType.description}
+                buttonText={contentType.buttonText} // Pass the buttonText here
+              />
+            ))}
+          </div>
+          <div className=" flex gap-x-20  mx-20 my-20  ">
+            {contentTypes.slice(2, 4).map((contentType) => (
+              <ChooseMedia
+                key={contentType.id}
+                image={contentType.image}
+                title={contentType.title}
+                description={contentType.description}
+                buttonText={contentType.buttonText} // Pass the buttonText here
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>
