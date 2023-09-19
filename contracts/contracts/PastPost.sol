@@ -6,33 +6,36 @@ import "./NFTContract.sol";
 
 contract PastPost is Ownable {
 
-    uint public counter = 1;
+    string public uri;
 
     struct Capsule {
         address owner;
         address nftContract;
     }
 
-    address[] public contracts;
-
-    mapping(uint256 => Capsule) public timeCapsules;
+    mapping(address => address[]) userNftContracts;
+    Capsule[] public timeCapsules;
     
-    event TimeCapsuleCreated(uint id, address owner, address nft);
+    event TimeCapsuleCreated(address owner, address nft);
 
-    constructor(address _nftFactory) {
-        nftFactory = _nftFactory;
+    constructor(string memory _uri) {
+        uri = _uri;
     }
 
-    function createTimeCapsule(address[] memory receivers) public {
-        require(receivers.length() <= 10, "Too many receivers");
+    function createTimeCapsule(address receiver) public {
         NFTContract nft = new NFTContract();
-        contracts.push(address(nft));
-        Capsule memory newCapsule = new Capsule({owner: msg.sender, nftContract: address(nft)});
-        timeCapsules[counter] = newCapsule;
-        counter++;
-        for (uint i = 1; receivers.length(); i++) {
-            nft.mint(receivers[i]);
-        } 
-        emit TimeCapsuleCreated(counter, msg.sender, address(nft));
+        userNftContracts[msg.sender].push(address(nft));
+        Capsule memory newCapsule = Capsule({owner: msg.sender, nftContract: address(nft)});
+        timeCapsules.push(newCapsule);
+        nft.safeMint(msg.sender, uri);
+        if (receiver != address(0)) {
+            nft.safeMint(receiver, uri);
+        }
+        nft.transferOwnership(msg.sender);
+        emit TimeCapsuleCreated(msg.sender, address(nft));
+    }
+
+    function setURI(string memory _uri) public onlyOwner {
+        uri = _uri;
     }
 }
