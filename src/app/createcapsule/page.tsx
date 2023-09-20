@@ -1,7 +1,101 @@
 import "../../../styles/style.css"
 import "../../../styles/createCapsule.css"
 import Image from 'next/image'
+import { ethers } from 'ethers';
+import lighthouse from '@lighthouse-web3/sdk';
+import { useState } from 'react';
+
 export default function CreateCapsuleFormPage(): JSX.Element {
+  const [cid, SetCid] = useState('');
+  const [account, setAccount] = useState('');
+  const [accounts, setAccounts] = useState([]);
+  const connectMetamask = async () => {
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      alert('please install metamask');
+    }
+    if (ethereum) {
+      const walletAccounts = await ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      setAccounts(walletAccounts);
+
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload();
+      });
+
+      window.ethereum.on('accountsChanged', () => {
+        window.location.reload();
+      });
+    }
+  };
+
+
+  connectMetamask();
+
+// TODO separate this into component
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data.message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    setAccount(accounts[0]);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
+
+  const progressCallback = (progressData) => {
+    let percentageDone = 100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    console.log(percentageDone);
+  };
+
+  // TODO separate this into component
+  const uploadFileEncrypted = async (file) => {
+    /*
+       uploadEncrypted(e, accessToken, publicKey, signedMessage, uploadProgressCallback)
+       - e: js event
+       - accessToken: your API key
+       - publicKey: wallets public key
+       - signedMessage: message signed by the owner of publicKey
+       - dealParameters: default null
+       - uploadProgressCallback: function to get progress (optional)
+    */
+    const sig = await encryptionSignature();
+
+
+    // TODO make a call to the backend to send files
+
+    const response = await lighthouse.uploadEncrypted(
+      file,
+      'de1443ca.854cd879e421475f935d4e74126035f7',
+      sig!.publicKey,
+      sig!.signedMessage,
+      undefined,
+      progressCallback,
+    );
+    console.log(response.data);
+    const { Hash } = response.data[0];
+    SetCid(Hash);
+    /*
+      output:
+        data: [{
+          Name: "c04b017b6b9d1c189e15e6559aeb3ca8.png",
+          Size: "318557",
+          Hash: "QmcuuAtmYqbPYmPx3vhJvPDi61zMxYvJbfENMjBQjq7aM3"
+        }]
+      Note: Hash in response is CID.
+    */
+  };
+
+  // NOTE this is the function that is called when the user clicks on the upload button
+  const handleCreateCapsule = async (e) => {
+    uploadFileEncrypted(e.target.files[0]);
+  };
+
   return (
     <div className="background flex flex-col">
       {/* top container */}
@@ -105,7 +199,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
           <input type="text" placeholder="31/12/2023" className="input input-bordered w-full max-w-xs bg-gray-50" />
         </div>
         <div className="pt-12">
-          <button className="btn btn-primary">Create Capsule</button>
+          <button className="btn btn-primary" onClick={handleCreateCapsule}>Create Capsule</button>
 
         </div>
 
