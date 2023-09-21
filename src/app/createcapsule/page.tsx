@@ -42,54 +42,16 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   };
 
   connectMetamask();
-  // TODO separate this into component
-  const createEncryptionSignature = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const messageRequested = (await lighthouse.getAuthMessage(address)).data.message;
-    const signedMessage = await signer.signMessage(messageRequested);
-    setAccount(accounts[0]);
-    return {
-      signedMessage: signedMessage,
-      publicKey: address,
-    };
-  };
 
-  const handleCreateCapsule = async () => {
-    const encryptionSignature = await createEncryptionSignature();
-    const uploadFilesWithEncryption = async () => {
-      const requestConfigs = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-      try {
-        if (encryptionSignature) {
-          console.log(encryptionSignature);
-        }
-        const response = axios
-          .post('api/accesscontrol', encryptionSignature, requestConfigs)
-          .then(function (response) {
-            console.log('Response:', response.data);
-          })
-          .catch(function (error) {
-            console.error('Error:', error);
-          });
-        if (response) {
-          const jsonData = await response;
-          console.log(jsonData);
-          // setData(jsonData);
-        } else {
-          // Handle error response
-          console.error('API request failed');
-        }
-      } catch (error) {
-        console.error('API request error:', error);
-      }
-    };
-    uploadFilesWithEncryption();
-  };
+  
+
+  interface IEncryptionSignature {
+    signedMessage: string;
+    publicKey: string;
+  }
+
+  const handleCreateCapsule= () => {}
+
 
   const handleChange = (e) => {
     const { id, value } = e.target;
