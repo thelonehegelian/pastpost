@@ -1,11 +1,21 @@
-import "../../../styles/style.css"
-import "../../../styles/createCapsule.css"
-import Image from 'next/image'
+'use client';
+import '../../../styles/style.css';
+import '../../../styles/createCapsule.css';
+import Image from 'next/image';
 import { ethers } from 'ethers';
 import lighthouse from '@lighthouse-web3/sdk';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+interface ICapsuleInformation {}
 
 export default function CreateCapsuleFormPage(): JSX.Element {
+  const [senderEmail, setSenderEmail] = useState('');
+  const [senderAddress, setSenderAddress] = useState('');
+  const [receiverName, setReceiverName] = useState('');
+  const [receiverEmail, setReceiverEmail] = useState('');
+  const [receiverMessage, setReceiverMessage] = useState('');
+  const [receiverAddress, setReceiverAddress] = useState('');
+  const [date, setDate] = useState('');
   const [cid, SetCid] = useState('');
   const [account, setAccount] = useState('');
   const [accounts, setAccounts] = useState([]);
@@ -31,11 +41,9 @@ export default function CreateCapsuleFormPage(): JSX.Element {
     }
   };
 
-
   connectMetamask();
-
-// TODO separate this into component
-  const encryptionSignature = async () => {
+  // TODO separate this into component
+  const createEncryptionSignature = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
@@ -48,52 +56,62 @@ export default function CreateCapsuleFormPage(): JSX.Element {
     };
   };
 
-  const progressCallback = (progressData) => {
-    let percentageDone = 100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
-    console.log(percentageDone);
+  const handleCreateCapsule = async () => {
+    const encryptionSignature = await createEncryptionSignature();
+    const uploadFilesWithEncryption = async () => {
+      const requestConfigs = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      try {
+        if (encryptionSignature) {
+          console.log(encryptionSignature);
+        }
+        const response = axios
+          .post('api/accesscontrol', encryptionSignature, requestConfigs)
+          .then(function (response) {
+            console.log('Response:', response.data);
+          })
+          .catch(function (error) {
+            console.error('Error:', error);
+          });
+        if (response) {
+          const jsonData = await response;
+          console.log(jsonData);
+          // setData(jsonData);
+        } else {
+          // Handle error response
+          console.error('API request failed');
+        }
+      } catch (error) {
+        console.error('API request error:', error);
+      }
+    };
+    uploadFilesWithEncryption();
   };
 
-  // TODO separate this into component
-  const uploadFileEncrypted = async (file) => {
-    /*
-       uploadEncrypted(e, accessToken, publicKey, signedMessage, uploadProgressCallback)
-       - e: js event
-       - accessToken: your API key
-       - publicKey: wallets public key
-       - signedMessage: message signed by the owner of publicKey
-       - dealParameters: default null
-       - uploadProgressCallback: function to get progress (optional)
-    */
-    const sig = await encryptionSignature();
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    if (id === 'senderEmail') {
+      setSenderEmail(value);
+    }
+    if (id === 'senderAddress') {
+      setSenderAddress(value);
+    }
+    if (id === 'receiverName') {
+      setReceiverName(value);
+    }
+    if (id === 'receiverEmail') {
+      setReceiverEmail(value);
+    }
 
-
-    // TODO make a call to the backend to send files
-
-    const response = await lighthouse.uploadEncrypted(
-      file,
-      'de1443ca.854cd879e421475f935d4e74126035f7',
-      sig!.publicKey,
-      sig!.signedMessage,
-      undefined,
-      progressCallback,
-    );
-    console.log(response.data);
-    const { Hash } = response.data[0];
-    SetCid(Hash);
-    /*
-      output:
-        data: [{
-          Name: "c04b017b6b9d1c189e15e6559aeb3ca8.png",
-          Size: "318557",
-          Hash: "QmcuuAtmYqbPYmPx3vhJvPDi61zMxYvJbfENMjBQjq7aM3"
-        }]
-      Note: Hash in response is CID.
-    */
-  };
-
-  // NOTE this is the function that is called when the user clicks on the upload button
-  const handleCreateCapsule = async (e) => {
-    uploadFileEncrypted(e.target.files[0]);
+    if (id === 'receiverMessage') {
+      setReceiverMessage(value);
+    }
+    if (id === 'receiverAddress') {
+      setReceiverAddress(value);
+    }
   };
 
   return (
@@ -104,9 +122,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         <div className="text-black w-1/2 flex flex-col justify-end">
           {/* HEADING AND SUBHEADING */}
           <div className="pl-80 pb-20">
-            <h1 className="font-medium text-md pb-6">
-              Almost There!
-            </h1>
+            <h1 className="font-medium text-md pb-6">Almost There!</h1>
             <div className="font-medium text-2xl">
               <span> Let's review your</span>
               <br />
@@ -120,7 +136,13 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         <div className=" w-1/2 flex flex-col  h-full">
           <div className="w-1/2  mb-10 flex flex-col justify-center h-1/4 pl-28">
             <div className="flex p-4">
-              <Image src="/circleCheck.svg" alt="check circle" width={30} height={30} className="pr-2" />
+              <Image
+                src="/circleCheck.svg"
+                alt="check circle"
+                width={30}
+                height={30}
+                className="pr-2"
+              />
               <p className="text-black font-medium">Your media</p>
             </div>
             <p className="text-gray-500 pl-12">These are your time capsules</p>
@@ -128,7 +150,6 @@ export default function CreateCapsuleFormPage(): JSX.Element {
           <div className="relative w-full h-full">
             <Image src="/capsuleImages.svg" alt="capsules" fill={true} />
           </div>
-
         </div>
       </div>
 
@@ -136,77 +157,115 @@ export default function CreateCapsuleFormPage(): JSX.Element {
 
       {/* form container */}
       <div className="formContainer rounded-xl">
-        <h1 className="text-black font-semibold text-2xl pb-4">
-          Who will get this time capsule
-        </h1>
+        <h1 className="text-black font-semibold text-2xl pb-4">Who will get this time capsule</h1>
         {/* Section */}
         <div>
-          <h3 className="text-black font-medium text-md pb-4">
-            Sender Info
-          </h3>
+          <h3 className="text-black font-medium text-md pb-4">Sender Info</h3>
+          {/* Sender Email          */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Email*</span>
             </label>
-            <input type="text" placeholder="jdoe@gmail.com" className="input input-bordered w-full max-w-xs bg-gray-50" />
+            <input
+              id="senderEmail"
+              onChange={handleChange}
+              type="text"
+              placeholder="jdoe@gmail.com"
+              className="input input-bordered w-full max-w-xs bg-gray-50"
+            />
           </div>
 
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Wallet or ENS*</span>
             </label>
-            <input type="text" placeholder="0x... or myEthereum.eth" className="input input-bordered w-full max-w-xs bg-gray-50" />
+            <input
+              id="senderAddress"
+              onChange={handleChange}
+              type="text"
+              placeholder="0x... or myEthereum.eth"
+              className="input input-bordered w-full max-w-xs bg-gray-50"
+            />
           </div>
         </div>
         {/* Section */}
         <div>
-          <h3 className="text-black font-medium text-md pb-4 pt-8">
-            Receiver Info
-          </h3>
+          <h3 className="text-black font-medium text-md pb-4 pt-8">Receiver Info</h3>
+
+          {/* Receiver Name */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Name*</span>
             </label>
-            <input type="text" placeholder="joe doe" className="input input-bordered w-full max-w-xs bg-gray-50" />
+            <input
+              id="receiverName"
+              onChange={handleChange}
+              type="text"
+              placeholder="joe doe"
+              className="input input-bordered w-full max-w-xs bg-gray-50"
+            />
           </div>
 
+          {/* Receiver Email */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Email*</span>
             </label>
-            <input type="text" placeholder="jdoe@gmail.com" className="input input-bordered w-full max-w-xs bg-gray-50" />
+            <input
+              id="receiverEmail"
+              onChange={handleChange}
+              type="text"
+              placeholder="jdoe@gmail.com"
+              className="input input-bordered w-full max-w-xs bg-gray-50"
+            />
           </div>
 
+          {/* Message to the Receiver */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Message</span>
             </label>
-            <input type="text" placeholder="Write a short message" className="input input-bordered w-full max-w-xs bg-gray-50" />
+            <input
+              id="receiverMessage"
+              onChange={handleChange}
+              type="text"
+              placeholder="Write a short message"
+              className="input input-bordered w-full max-w-xs bg-gray-50"
+            />
           </div>
-
+          {/* Receiver Address */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Wallet or ENS*</span>
             </label>
-            <input type="text" placeholder="0x... or myEthereum.eth" className="input input-bordered w-full max-w-xs bg-gray-50" />
+            <input
+              id="receiverAddress"
+              onChange={handleChange}
+              type="text"
+              placeholder="0x... or myEthereum.eth"
+              className="input input-bordered w-full max-w-xs bg-gray-50"
+            />
           </div>
         </div>
-
+        {/* Date to be opened */}
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Date*</span>
           </label>
-          <input type="text" placeholder="31/12/2023" className="input input-bordered w-full max-w-xs bg-gray-50" />
+          <input
+            id="date"
+            onChange={handleChange}
+            type="text"
+            placeholder="31/12/2023"
+            className="input input-bordered w-full max-w-xs bg-gray-50"
+          />
         </div>
         <div className="pt-12">
-          <button className="btn btn-primary" onClick={handleCreateCapsule}>Create Capsule</button>
-
+          <button className="btn btn-primary" onClick={handleCreateCapsule}>
+            Create Capsule
+          </button>
         </div>
-
       </div>
-    </div >
-  )
-
+    </div>
+  );
 }
-
-
