@@ -1,9 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../styles/style.css';
 import lighthouse from '@lighthouse-web3/sdk';
 import { ethers } from 'ethers';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 // BAD IDEA
 const API_KEY = 'de1443ca.854cd879e421475f935d4e74126035f7';
 
@@ -25,12 +25,10 @@ const FileUploader = () => {
   const [account, setAccount] = useState('');
   const [accounts, setAccounts] = useState([]);
   const router = useRouter();
-
-
-
+  console.log('something is going wrong');
   const connectMetamask = async () => {
     const { ethereum } = window;
-  
+
     if (!ethereum) {
       alert('please install metamask');
     }
@@ -39,18 +37,21 @@ const FileUploader = () => {
         method: 'eth_requestAccounts',
       });
       setAccounts(walletAccounts);
-  
+
       window.ethereum.on('chainChanged', () => {
         window.location.reload();
       });
-  
+
       window.ethereum.on('accountsChanged', () => {
         window.location.reload();
       });
     }
   };
-  
-  connectMetamask();
+
+  useEffect(() => {
+    connectMetamask();
+  }, [account]);
+
   const createEncryptionSignature = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -63,19 +64,18 @@ const FileUploader = () => {
       publicKey: address,
     };
   };
-  
+
   interface IEncryptionSignature {
     signedMessage: string;
     publicKey: string;
   }
-  
+
   const progressCallback = (progressData) => {
-    let percentageDone =
-      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    let percentageDone = 100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
     console.log(percentageDone);
   };
-  
-  const uploadFileEncrypted = async(file) =>{
+
+  const uploadFileEncrypted = async (file) => {
     const sig = await createEncryptionSignature();
     const response = await lighthouse.uploadEncrypted(
       file,
@@ -83,13 +83,12 @@ const FileUploader = () => {
       sig.publicKey,
       sig.signedMessage,
       undefined,
-      progressCallback
+      progressCallback,
     );
-     
-     return response;
-  }
-  
-  
+
+    return response;
+  };
+
   const getTotalFileSize = (files: File[]) =>
     files.reduce((totalSize, file) => totalSize + file.size, 0);
 
@@ -98,7 +97,7 @@ const FileUploader = () => {
     if (files) {
       setFilesToUpload(files);
     }
-    
+
     if (files) {
       const selected: File[] = Array.from(files);
 
@@ -154,19 +153,17 @@ const FileUploader = () => {
     e.stopPropagation();
   };
 
-  
-  const handleFileUpload = async () => {    
-    let filehash = ''
-        if (filesToUpload) {
-        const res = await uploadFileEncrypted(filesToUpload);
-          filehash = res.data[0].Hash;
+  const handleFileUpload = async () => {
+    let filehash = '';
+    if (filesToUpload) {
+      const res = await uploadFileEncrypted(filesToUpload);
+      filehash = res.data[0].Hash;
     }
     if (filehash !== '') {
-      const uri = `/createcapsule?cid=${filehash}`
+      const uri = `/createcapsule?cid=${filehash}`;
       router.push(uri);
     }
-
-  }
+  };
 
   return (
     <div className="relative">
@@ -202,7 +199,6 @@ const FileUploader = () => {
       </div>
       <label className="btn btn-outline absolute right-32 w-40 my-6 btn-primary">
         <input
-       
           type="file"
           accept=".mp4,.jpeg,.jpg,.gif,.webm,.mov"
           multiple
@@ -212,10 +208,8 @@ const FileUploader = () => {
         Add Files
       </label>
       {/* <input onChange={e=>handleFileUpload(e.target.files)} type="file" /> */}
-    <button  onClick={handleFileUpload}>Upload Files</button>
-
+      <button onClick={handleFileUpload}>Upload Files</button>
     </div>
-
   );
 };
 
