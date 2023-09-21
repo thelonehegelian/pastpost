@@ -22,7 +22,6 @@ contract PastPost is Ownable, ERC721Holder {
     mapping(address => address[]) public userNftContracts;
     Capsule[] public timeCapsules;
     
-    event TableCreated(uint256 tableId, string tableName);
     event TimeCapsuleCreated(address owner, address nft);
 
     constructor() {
@@ -41,7 +40,7 @@ contract PastPost is Ownable, ERC721Holder {
         return SQLHelpers.toNameFromId(TABLE_PREFIX, tableId);
     }
 
-    function createTimeCapsule(address receiver, string[] calldata _cids) public {
+    function createTimeCapsule(address receiver) public returns(address) {
         NFTContract nft = new NFTContract();
         userNftContracts[msg.sender].push(address(nft));
         Capsule memory newCapsule = Capsule({owner: msg.sender, nftContract: address(nft)});
@@ -52,9 +51,15 @@ contract PastPost is Ownable, ERC721Holder {
         }
         nft.transferOwnership(msg.sender);
 
+        emit TimeCapsuleCreated(msg.sender, address(nft));
+
+        return address(nft);
+    }
+
+    function insertIntoTable(address _nft, string[] calldata _cids) external {
         string[] memory values = new string[](_cids.length);
         for (uint i = 0; i < _cids.length; i++) {
-            values[i] = string(abi.encodePacked("'", address(nft), " ", _cids[i], "'"));
+            values[i] = string(abi.encodePacked("'", _nft, " ", _cids[i], "'"));
         }
 
         TablelandDeployments.get().mutate(
@@ -67,7 +72,6 @@ contract PastPost is Ownable, ERC721Holder {
                 values
             )
         );
-        emit TimeCapsuleCreated(msg.sender, address(nft));
     }
 
     function setURI(string memory _uri) public onlyOwner {
