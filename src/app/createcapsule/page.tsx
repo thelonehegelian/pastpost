@@ -6,6 +6,7 @@ import { ethers } from 'ethers';
 import lighthouse from '@lighthouse-web3/sdk';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter, useSearchParams } from 'next/navigation';
 interface ICapsuleInformation {}
 
 export default function CreateCapsuleFormPage(): JSX.Element {
@@ -16,9 +17,27 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   const [receiverMessage, setReceiverMessage] = useState('');
   const [receiverAddress, setReceiverAddress] = useState('');
   const [date, setDate] = useState('');
-  const [cid, SetCid] = useState('');
   const [account, setAccount] = useState('');
   const [accounts, setAccounts] = useState([]);
+  const router = useRouter();
+  const params = useSearchParams();
+  const [cid, setCid] = useState('');
+  const [nftAddress, setNftAddress] = useState('');
+
+  // TODO extract to helper folder
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data.message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
+
+  // TODO extract to helper folder
   const connectMetamask = async () => {
     const { ethereum } = window;
 
@@ -41,17 +60,15 @@ export default function CreateCapsuleFormPage(): JSX.Element {
     }
   };
 
-  connectMetamask();
+  useEffect(() => {
+    connectMetamask();
 
-  
-
+    setCid(params.get('cid')!);
+  }, [cid]);
   interface IEncryptionSignature {
     signedMessage: string;
     publicKey: string;
   }
-
-  const handleCreateCapsule= () => {}
-
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -76,6 +93,45 @@ export default function CreateCapsuleFormPage(): JSX.Element {
     }
   };
 
+  // TODO move this out
+  const conditions = [
+    {
+      id: 1,
+      chain: 'Calibration',
+      method: 'balanceOf',
+      standardContractType: 'ERC721',
+      contractAddress: '0xd9145CCE52D386f254917e481eB44e9943F39138',
+      returnValueTest: { comparator: '>=', value: '1' },
+      parameters: [':userAddress'],
+    },
+  ];
+  const applyAccessConditions = async () => {
+    // Conditions to add
+
+    const aggregator = '([1])';
+    const { publicKey, signedMessage } = await encryptionSignature();
+
+    const response = await lighthouse.applyAccessCondition(
+      publicKey,
+      cid,
+      signedMessage,
+      conditions,
+      aggregator,
+    );
+    return response;
+  };
+
+  const handleCreateCapsule = async () => {
+    // TODO handle form validation
+    console.log('applying access control');
+    const res = await applyAccessConditions();
+    console.log(res);
+    if (res.data.status === 'Success') {
+      console.log('Access Control Applied');
+
+      router.push('/capsulecreated');
+    }
+  };
   return (
     <div className="background flex flex-col">
       {/* top container */}
