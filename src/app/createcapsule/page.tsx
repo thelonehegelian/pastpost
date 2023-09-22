@@ -7,6 +7,7 @@ import lighthouse from '@lighthouse-web3/sdk';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
+import estimateFutureBlockNumber from '../../helpers/blockEstimator';
 interface ICapsuleInformation {}
 
 export default function CreateCapsuleFormPage(): JSX.Element {
@@ -91,40 +92,58 @@ export default function CreateCapsuleFormPage(): JSX.Element {
     if (id === 'receiverAddress') {
       setReceiverAddress(value);
     }
+    if (id === 'date') {
+      setDate(value);
+    }
   };
 
   // TODO move this out
-  const conditions = [
-    {
-      id: 1,
-      chain: 'Calibration',
-      method: 'balanceOf',
-      standardContractType: 'ERC721',
-      contractAddress: '0xd9145CCE52D386f254917e481eB44e9943F39138',
-      returnValueTest: { comparator: '>=', value: '1' },
-      parameters: [':userAddress'],
-    },
-  ];
-  const applyAccessConditions = async () => {
+
+  const applyAccessConditions = async (_conditions) => {
     // Conditions to add
 
-    const aggregator = '([1])';
+    const aggregator = '([1] and [2])';
     const { publicKey, signedMessage } = await encryptionSignature();
 
     const response = await lighthouse.applyAccessCondition(
       publicKey,
       cid,
       signedMessage,
-      conditions,
+      _conditions,
       aggregator,
     );
     return response;
   };
 
   const handleCreateCapsule = async () => {
+    // TODO get this from the chain
+    const currentBlockNum = 933808;
+    const dateToOpen = new Date(date);
+    const futureBlockNumber = estimateFutureBlockNumber(currentBlockNum, dateToOpen);
+    const accessConditions = [
+      {
+        id: 1,
+        chain: 'Calibration',
+        method: 'balanceOf',
+        standardContractType: 'ERC721',
+        contractAddress: '0xd9145CCE52D386f254917e481eB44e9943F39138',
+        returnValueTest: { comparator: '>=', value: '1' },
+        parameters: [':userAddress'],
+      },
+      {
+        id: 2,
+        chain: 'Calibration',
+        method: 'getBlockNumber',
+        standardContractType: '',
+        returnValueTest: {
+          comparator: '>',
+          value: futureBlockNumber,
+        },
+      },
+    ];
     // TODO handle form validation
     console.log('applying access control');
-    const res = await applyAccessConditions();
+    const res = await applyAccessConditions(accessConditions);
     console.log(res);
     if (res.data.status === 'Success') {
       console.log('Access Control Applied');
