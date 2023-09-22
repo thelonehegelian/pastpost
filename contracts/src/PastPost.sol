@@ -56,12 +56,7 @@ contract PastPost is Ownable, ERC721Holder {
         return address(nft);
     }
 
-    function insertIntoTable(address _nft, string[] calldata _cids) external {
-        string[] memory values = new string[](_cids.length);
-        for (uint i = 0; i < _cids.length; i++) {
-            values[i] = string(abi.encodePacked("'", _nft, " ", _cids[i], "'"));
-        }
-
+    function insertIntoTable(string[] memory _rows) external {
         TablelandDeployments.get().mutate(
             address(this),
             tableId,
@@ -69,7 +64,7 @@ contract PastPost is Ownable, ERC721Holder {
                 TABLE_PREFIX,
                 tableId,
                 "capsule, cid",
-                values
+                _rows
             )
         );
     }
@@ -77,6 +72,4 @@ contract PastPost is Ownable, ERC721Holder {
     function setURI(string memory _uri) public onlyOwner {
         uri = _uri;
     }
-
-
 }
