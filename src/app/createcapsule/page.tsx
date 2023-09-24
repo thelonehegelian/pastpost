@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import estimateFutureBlockNumber from '../../helpers/blockEstimator';
+
 interface ICapsuleInformation {}
 
 export default function CreateCapsuleFormPage(): JSX.Element {
@@ -24,9 +25,41 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   const params = useSearchParams();
   const [cid, setCid] = useState('');
   const [nftAddress, setNftAddress] = useState('');
+  const [nftContractAddress, setNftContractAddress] = useState(
+    '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3',
+  );
+
+  const contractABI = ['function createTimeCapsule(address) public returns (address)'];
+
+  const minNft = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3',
+      contractABI,
+      signer,
+    );
+
+    console.log(receiverAddress);
+    console.log(provider.getSigner());
+    try {
+      const nftReceiver = receiverAddress;
+      const transaction = await contract.createTimeCapsule(nftReceiver);
+      // TODO update nft address
+
+      console.log(transaction);
+      await transaction.wait();
+      console.log('transaction mined');
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // TODO extract to helper folder
   const encryptionSignature = async () => {
+    // TODO move the provider to state, the provider type is ExternalProvider
+    // same with signer and address
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
@@ -66,6 +99,8 @@ export default function CreateCapsuleFormPage(): JSX.Element {
 
     setCid(params.get('cid')!);
   }, [cid]);
+
+  // TODO use this interface
   interface IEncryptionSignature {
     signedMessage: string;
     publicKey: string;
@@ -98,9 +133,8 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   };
 
   // TODO move this out
-
   const applyAccessConditions = async (_conditions) => {
-    // Conditions to add
+    // Conditions: applies NFT gate and date gate
 
     const aggregator = '([1] and [2])';
     const { publicKey, signedMessage } = await encryptionSignature();
@@ -126,7 +160,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         chain: 'Calibration',
         method: 'balanceOf',
         standardContractType: 'ERC721',
-        contractAddress: '0xd9145CCE52D386f254917e481eB44e9943F39138',
+        contractAddress: nftAddress,
         returnValueTest: { comparator: '>=', value: '1' },
         parameters: [':userAddress'],
       },
@@ -297,9 +331,15 @@ export default function CreateCapsuleFormPage(): JSX.Element {
             className="input input-bordered w-full max-w-xs bg-gray-50"
           />
         </div>
+
+        <div className="pt-12">
+          <button className="btn btn-primary" onClick={minNft}>
+            Mint NFT
+          </button>
+        </div>
         <div className="pt-12">
           <button className="btn btn-primary" onClick={handleCreateCapsule}>
-            Create Capsule
+            Finalise Capsule
           </button>
         </div>
       </div>
