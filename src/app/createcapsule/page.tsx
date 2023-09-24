@@ -29,8 +29,11 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   const [timeCapsuleMinted, setTimeCapsuleMinted] = useState(false);
   const [isCreatingCapsule, setIsCreatingCapsule] = useState(false);
 
+  // TODO move this to constants
   const contractABI = ['function createTimeCapsule(address) public returns (address)'];
+  // TODO move to constants
   const timeCapsuleContractAddress = '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3';
+
   const minNft = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -185,7 +188,8 @@ export default function CreateCapsuleFormPage(): JSX.Element {
       if (res.data.status === 'Success') {
         console.log('Access Control Applied');
         setIsCreatingCapsule(false);
-        router.push('/capsulecreated');
+        const uri = `/capsulecreated?cid=${cid}`;
+        router.push(uri);
       }
     } catch (err) {
       console.log(err);
@@ -351,7 +355,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
                 <span className="loading loading-infinity loading-lg"></span>
               </div>
             )}
-            <div className="pt-12">
+            <>
               {isCreatingCapsule === false ? (
                 <button className="btn btn-primary" onClick={handleCreateCapsule}>
                   Finalise Capsule
@@ -361,7 +365,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
                   <span className="loading loading-infinity loading-lg"></span>
                 </div>
               )}
-            </div>
+            </>
           </div>
         ) : (
           <div className="flex items-center justify-between pt-12">
