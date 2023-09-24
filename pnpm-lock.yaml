@@ -8,6 +8,9 @@ dependencies:
   '@lighthouse-web3/sdk':
     specifier: ^0.2.7
     version: 0.2.7
+  '@tableland/sdk':
+    specifier: ^4.5.1
+    version: 4.5.1
   '@uidotdev/usehooks':
     specifier: ^2.3.1
     version: 2.3.1(react-dom@18.2.0)(react@18.2.0)
@@ -122,6 +125,27 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
     dev: true
+
+  /@async-generators/from-emitter@0.3.0:
+    resolution: {integrity: sha512-9ne/GfJfbw77wuA08WtuNIvMhpDwAEPT/GX/Dn33y/Bu1zKqO0bOWmcWTpLiHrO2vedEbW0GihfkG7EINEghsA==}
+    engines: {node: '>=9.0.0'}
+    dependencies:
+      '@async-generators/subject': 0.4.0
+      '@async-generators/terminator': 0.4.0
+    dev: false
+
+  /@async-generators/subject@0.4.0:
+    resolution: {integrity: sha512-ydMe58ouMupnJlvBq6SaG6ranw1uX6rcAfAVE37oNJLen9RJ1+sY6yju8xp6en8RwWn3gBtAx03ot1Ycr3U0QQ==}
+    engines: {node: '>=9.0.0'}
+    dependencies:
+      '@async-generators/terminator': 0.4.0
+      events: 1.1.1
+    dev: false
+
+  /@async-generators/terminator@0.4.0:
+    resolution: {integrity: sha512-Kj08FqHgdx4QZ1mwJrlN3L2MWNNWHHWSQezfClxMUvGU1pYjoRa/4Yev1U/2Y71aqDDXEYC7pr13HNv7Un7Kog==}
+    engines: {node: '>=9.0.0'}
+    dev: false
 
   /@babel/runtime@7.22.11:
     resolution: {integrity: sha512-ee7jVNlWN09+KftVOu9n7S8gQzD/Z6hN/I8VBRXW4P1+Xe7kJGXMwu8vds4aGIMHZnNbdpSWCfZZtinytpcAvA==}
@@ -855,6 +879,10 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  /@openzeppelin/contracts@4.8.3:
+    resolution: {integrity: sha512-bQHV8R9Me8IaJoJ2vPG4rXcL7seB7YVuskr4f+f5RyOStSZetwzkWtoqDMl5erkBJy0lDRUnIR2WIkPiC0GJlg==}
+    dev: false
+
   /@peculiar/asn1-schema@2.3.6:
     resolution: {integrity: sha512-izNRxPoaeJeg/AyH8hER6s+H7p4itk+03QCa4sbxI3lNdseQYCuxzgsuNK8bTXChtLTjpJz6NmXKA73qLa3rCA==}
     dependencies:
@@ -1128,6 +1156,29 @@ packages:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@tableland/evm@4.3.0:
+    resolution: {integrity: sha512-DweAJgho9hwjSF+0My0eB8T8OQ66Pe3IC0878s6GArA6aMDr3OYRk35TW/EgOPTBlVBgqo0S1WBHW+hswG8miw==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      '@openzeppelin/contracts': 4.8.3
+    dev: false
+
+  /@tableland/sdk@4.5.1:
+    resolution: {integrity: sha512-ffvZYA9v6eNFsPYWtYJFfPT48rgtPIY4VTdcJbV2so7r4XGPw7JY4qdkWNO+2J8l4vOR9dusiSOHKVhHsNWeOA==}
+    dependencies:
+      '@async-generators/from-emitter': 0.3.0
+      '@tableland/evm': 4.3.0
+      '@tableland/sqlparser': 1.3.0
+      ethers: 5.7.2
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /@tableland/sqlparser@1.3.0:
+    resolution: {integrity: sha512-5DddKKbxa3q1DcUBcf+D9bF0xYjoqWYRs8t941vZWDMRQjuHNPW7JjRA0W8zH+LDeKYqWmyJFsm1se8RxTcJPA==}
     dev: false
 
   /@tanstack/query-core@4.33.0:
@@ -3671,6 +3722,11 @@ packages:
 
   /eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+    dev: false
+
+  /events@1.1.1:
+    resolution: {integrity: sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==}
+    engines: {node: '>=0.4.x'}
     dev: false
 
   /events@3.3.0:
