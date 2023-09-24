@@ -25,24 +25,19 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   const params = useSearchParams();
   const [cid, setCid] = useState('');
   const [nftAddress, setNftAddress] = useState('');
-  const [nftContractAddress, setNftContractAddress] = useState(
-    '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3',
-  );
+  const [isMinting, setIsMinting] = useState(false);
 
   const contractABI = ['function createTimeCapsule(address) public returns (address)'];
-
+  const nftContractAddress = '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3';
   const minNft = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3',
-      contractABI,
-      signer,
-    );
+    const contract = new ethers.Contract(nftContractAddress, contractABI, signer);
 
     console.log(receiverAddress);
     console.log(provider.getSigner());
     try {
+      setIsMinting(true);
       const nftReceiver = receiverAddress;
       const transaction = await contract.createTimeCapsule(nftReceiver);
       // TODO update nft address
@@ -50,8 +45,10 @@ export default function CreateCapsuleFormPage(): JSX.Element {
       console.log(transaction);
       await transaction.wait();
       console.log('transaction mined');
+      setIsMinting(false);
     } catch (err) {
       console.log(err);
+      setIsMinting(false);
     }
   };
 
@@ -333,9 +330,13 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         </div>
 
         <div className="pt-12">
-          <button className="btn btn-primary" onClick={minNft}>
-            Mint NFT
-          </button>
+          {isMinting === false ? (
+            <button className="btn btn-primary" onClick={minNft}>
+              Mint NFT
+            </button>
+          ) : (
+            <span className="loading loading-infinity loading-md"></span>
+          )}
         </div>
         <div className="pt-12">
           <button className="btn btn-primary" onClick={handleCreateCapsule}>
