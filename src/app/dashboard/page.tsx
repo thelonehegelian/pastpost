@@ -1,9 +1,9 @@
 'use client';
 import axios from 'axios';
 import { useState } from 'react';
-const register_job = async () => {
+import { useSearchParams } from 'next/navigation';
+const register_job = async (cid: string) => {
   const formData = new FormData();
-  const cid = 'QmVUcUswNJCT5rLEXKBq1A7iRBHDRp4oG5sPRygyZp2zuZ';
   const requestReceivedTime = new Date();
   const endDate = new Date(requestReceivedTime); // Clone the date object
   endDate.setMonth(endDate.getMonth() + 1);
@@ -28,9 +28,11 @@ const register_job = async () => {
 
 export function Dashboard() {
   const [job, setJob] = useState(false);
+  // TODO get this from Tableland
+  const [cid, setCid] = useState('');
 
   const handleAcceptance = async () => {
-    const raas = await register_job();
+    const raas = await register_job(cid);
     if (raas.status === 201) {
       setJob(!job);
     }
