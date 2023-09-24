@@ -26,13 +26,15 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   const [cid, setCid] = useState('');
   const [nftAddress, setNftAddress] = useState('');
   const [isMinting, setIsMinting] = useState(false);
+  const [timeCapsuleMinted, setTimeCapsuleMinted] = useState(false);
+  const [isCreatingCapsule, setIsCreatingCapsule] = useState(false);
 
   const contractABI = ['function createTimeCapsule(address) public returns (address)'];
-  const nftContractAddress = '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3';
+  const timeCapsuleContractAddress = '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3';
   const minNft = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(nftContractAddress, contractABI, signer);
+    const contract = new ethers.Contract(timeCapsuleContractAddress, contractABI, signer);
 
     console.log(receiverAddress);
     console.log(provider.getSigner());
@@ -43,9 +45,11 @@ export default function CreateCapsuleFormPage(): JSX.Element {
       // TODO update nft address
 
       console.log(transaction);
-      await transaction.wait();
+      const txSuccess = await transaction.wait();
+      console.log(txSuccess);
       console.log('transaction mined');
       setIsMinting(false);
+      setTimeCapsuleMinted(true);
     } catch (err) {
       console.log(err);
       setIsMinting(false);
@@ -147,6 +151,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   };
 
   const handleCreateCapsule = async () => {
+    setIsCreatingCapsule(true);
     // TODO get this from the chain
     const currentBlockNum = 933808;
     const dateToOpen = new Date(date);
@@ -157,7 +162,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         chain: 'Calibration',
         method: 'balanceOf',
         standardContractType: 'ERC721',
-        contractAddress: nftAddress,
+        contractAddress: timeCapsuleContractAddress,
         returnValueTest: { comparator: '>=', value: '1' },
         parameters: [':userAddress'],
       },
@@ -168,20 +173,26 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         standardContractType: '',
         returnValueTest: {
           comparator: '>',
-          value: futureBlockNumber,
+          value: futureBlockNumber.toString(),
         },
       },
     ];
     // TODO handle form validation
     console.log('applying access control');
-    const res = await applyAccessConditions(accessConditions);
-    console.log(res);
-    if (res.data.status === 'Success') {
-      console.log('Access Control Applied');
-
-      router.push('/capsulecreated');
+    try {
+      const res = await applyAccessConditions(accessConditions);
+      console.log(res);
+      if (res.data.status === 'Success') {
+        console.log('Access Control Applied');
+        setIsCreatingCapsule(false);
+        router.push('/capsulecreated');
+      }
+    } catch (err) {
+      console.log(err);
+      setIsCreatingCapsule(false);
     }
   };
+
   return (
     <div className="background flex flex-col">
       {/* top container */}
@@ -324,25 +335,50 @@ export default function CreateCapsuleFormPage(): JSX.Element {
             id="date"
             onChange={handleChange}
             type="text"
-            placeholder="31/12/2023"
+            placeholder="2023-09-30"
             className="input input-bordered w-full max-w-xs bg-gray-50"
           />
         </div>
 
-        <div className="pt-12">
-          {isMinting === false ? (
-            <button className="btn btn-primary" onClick={minNft}>
-              Mint NFT
-            </button>
-          ) : (
-            <span className="loading loading-infinity loading-md"></span>
-          )}
-        </div>
-        <div className="pt-12">
-          <button className="btn btn-primary" onClick={handleCreateCapsule}>
-            Finalise Capsule
-          </button>
-        </div>
+        {timeCapsuleMinted === false ? (
+          <div className="flex items-center justify-between pt-12">
+            {isMinting === false ? (
+              <button className="btn btn-primary" onClick={minNft}>
+                Mint NFT
+              </button>
+            ) : (
+              <div className="flex items-center justify-center">
+                <span className="loading loading-infinity loading-lg"></span>
+              </div>
+            )}
+            <div className="pt-12">
+              {isCreatingCapsule === false ? (
+                <button className="btn btn-primary" onClick={handleCreateCapsule}>
+                  Finalise Capsule
+                </button>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <span className="loading loading-infinity loading-lg"></span>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between pt-12">
+            <div>
+              <button className="btn btn-active btn-ghost btn-disabled">Minted</button>
+            </div>
+            {isCreatingCapsule === false ? (
+              <button className="btn btn-primary" onClick={handleCreateCapsule}>
+                Finalise Capsule
+              </button>
+            ) : (
+              <div className="flex items-center justify-center">
+                <span className="loading loading-infinity loading-lg"></span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
