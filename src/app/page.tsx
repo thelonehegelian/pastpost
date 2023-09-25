@@ -1,4 +1,3 @@
-
 import { Account } from '../components/Account';
 import { Connect } from '../components/Connect';
 import { Connected } from '../components/Connected';
@@ -36,7 +35,7 @@ export default function page() {
           {/* Links container*/}
           {/* TODO make a single component for links */}
           <div className="flex-1 flex justify-center items-center">
-            <Link href="/createcapsule" className="flex justify-center text-black text-lg pr-8">
+            <Link href="/choosemedia" className="flex justify-center text-black text-lg pr-8">
               Create capsule
             </Link>
 
@@ -71,7 +70,7 @@ export default function page() {
           </div>
           {/* buttons */}
           <div className="flex-1 justify-center flex ">
-            <Link href="/createcapsule">
+            <Link href="/choosemedia">
               <button className="btn btn-active btn-primary mr-10">Create Capsule</button>
             </Link>
             <Link href="dashboard">
@@ -100,4 +99,3 @@ export default function page() {
     </>
   );
 }
-
