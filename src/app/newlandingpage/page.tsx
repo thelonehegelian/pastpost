@@ -63,7 +63,7 @@ export default function newlandingpage() {
           </div>
           {/* buttons */}
           <div className="flex-1 justify-center flex ">
-            <Link href="/createcapsule">
+            <Link href="/choosemedia">
               <button className="btn btn-active btn-primary mr-10">Create Capsule</button>
             </Link>
             <Link href="dashboard">

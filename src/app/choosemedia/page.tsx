@@ -11,7 +11,7 @@ const contentTypes = [
     id: 1,
     title: 'Send a video to the future',
     image: video,
-    description: 'Lorem ipsum dolor sit amet pretium consectetur adipiscing elit. ',
+    description: 'Give your future self some advice or tell them how you feel today',
     buttonText: 'Record Video', // Add buttonText property
   },
   {
@@ -33,7 +33,7 @@ const contentTypes = [
     id: 4,
     title: 'How will your voice sound later in life?',
     image: voice,
-    description: 'Safe a voice message your that person in the future',
+    description: 'Save a voice message your that person in the future',
     buttonText: 'Record voice ', // Add buttonText property
   },
 ];

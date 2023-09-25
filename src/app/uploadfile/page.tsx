@@ -3,9 +3,11 @@ import '../../../styles/style.css';
 import Image from 'next/image';
 import tick from '../../../public/tick.svg';
 
+
 export default function uploadFile(): JSX.Element {
+
   return (
-    <>
+    <div className="bg-white h-screen">
       <div className="upload  w-full  ">
         <div className="p-20 px-28 flex flex-row">
           <div className="flex mx-1 ">
@@ -20,6 +22,6 @@ export default function uploadFile(): JSX.Element {
           <FileUploader />
         </div>
       </div>
-    </>
+    </div>
   );
 }
