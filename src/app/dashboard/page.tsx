@@ -1,9 +1,8 @@
 'use client';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Database } from '@tableland/sdk';
-
 const register_job = async (cid: string) => {
   const formData = new FormData();
   const requestReceivedTime = new Date();
@@ -28,18 +27,25 @@ const register_job = async (cid: string) => {
   return response;
 };
 
+interface PastPostTable {
+  timeCapsuleAddress: string;
+  cid: string;
+  id: number;
+}
 export function Dashboard() {
+  const [tableData, setTableData] = useState<PastPostTable[]>([]);
   const tableName: string = 'pastpost_314159_362'; // Our pre-defined health check table
-  interface HealthBot {
-    counter: number;
-  }
   const db = new Database();
 
   const getTableResults = async () => {
     const { results } = await db.prepare(`SELECT * FROM ${tableName};`).all();
-
     console.log(results);
   };
+  useEffect(() => {
+    getTableResults();
+    console.log(tableData);
+  }, [tableData]);
+
   const [job, setJob] = useState(false);
   // TODO get this from Tableland
   const [cid, setCid] = useState('');
