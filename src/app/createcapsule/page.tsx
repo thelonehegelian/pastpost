@@ -34,28 +34,31 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   // TODO move to constants
   const timeCapsuleContractAddress = '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3';
 
-  const minNft = async () => {
+  const mintNft = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(timeCapsuleContractAddress, contractABI, signer);
 
-    console.log(receiverAddress);
-    console.log(provider.getSigner());
     try {
       setIsMinting(true);
+      console.log('minting nft');
       const nftReceiver = receiverAddress;
       const transaction = await contract.createTimeCapsule(nftReceiver);
       // TODO update nft address
 
       console.log(transaction);
-      const txSuccess = await transaction.wait();
-      console.log(txSuccess);
+      const txReceipt = await transaction.wait();
       console.log('transaction mined');
       setIsMinting(false);
       setTimeCapsuleMinted(true);
+      if (txReceipt && txReceipt.status == 1) {
+        return true;
+      }
+      return false;
     } catch (err) {
       console.log(err);
       setIsMinting(false);
+      return false;
     }
   };
 
@@ -155,34 +158,39 @@ export default function CreateCapsuleFormPage(): JSX.Element {
 
   const handleCreateCapsule = async () => {
     setIsCreatingCapsule(true);
-    // TODO get this from the chain
-    const currentBlockNum = 933808;
-    const dateToOpen = new Date(date);
-    const futureBlockNumber = estimateFutureBlockNumber(currentBlockNum, dateToOpen);
-    const accessConditions = [
-      {
-        id: 1,
-        chain: 'Calibration',
-        method: 'balanceOf',
-        standardContractType: 'ERC721',
-        contractAddress: timeCapsuleContractAddress,
-        returnValueTest: { comparator: '>=', value: '1' },
-        parameters: [':userAddress'],
-      },
-      {
-        id: 2,
-        chain: 'Calibration',
-        method: 'getBlockNumber',
-        standardContractType: '',
-        returnValueTest: {
-          comparator: '>',
-          value: futureBlockNumber.toString(),
-        },
-      },
-    ];
-    // TODO handle form validation
-    console.log('applying access control');
     try {
+      const mintSuccess = await mintNft();
+      if (!mintSuccess) {
+        setIsCreatingCapsule(false);
+        return alert('Error minting NFT');
+      }
+      // TODO get this from the chain
+      const currentBlockNum = 933808;
+      const dateToOpen = new Date(date);
+      const futureBlockNumber = estimateFutureBlockNumber(currentBlockNum, dateToOpen);
+      const accessConditions = [
+        {
+          id: 1,
+          chain: 'Calibration',
+          method: 'balanceOf',
+          standardContractType: 'ERC721',
+          contractAddress: timeCapsuleContractAddress,
+          returnValueTest: { comparator: '>=', value: '1' },
+          parameters: [':userAddress'],
+        },
+        {
+          id: 2,
+          chain: 'Calibration',
+          method: 'getBlockNumber',
+          standardContractType: '',
+          returnValueTest: {
+            comparator: '>',
+            value: futureBlockNumber.toString(),
+          },
+        },
+      ];
+      // TODO handle form validation
+      console.log('applying access control');
       const res = await applyAccessConditions(accessConditions);
       console.log(res);
       if (res.data.status === 'Success') {
@@ -257,12 +265,13 @@ export default function CreateCapsuleFormPage(): JSX.Element {
               className="input input-bordered w-full max-w-xs bg-gray-50"
             />
           </div>
-
+          {/* Eth Address of the sender */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Wallet or ENS*</span>
             </label>
             <input
+              required
               id="senderAddress"
               onChange={handleChange}
               type="text"
@@ -322,6 +331,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
               <span className="label-text">Wallet or ENS*</span>
             </label>
             <input
+              required
               id="receiverAddress"
               onChange={handleChange}
               type="text"
@@ -336,6 +346,7 @@ export default function CreateCapsuleFormPage(): JSX.Element {
             <span className="label-text">Date*</span>
           </label>
           <input
+            required
             id="date"
             onChange={handleChange}
             type="text"
@@ -343,52 +354,17 @@ export default function CreateCapsuleFormPage(): JSX.Element {
             className="input input-bordered w-full max-w-xs bg-gray-50"
           />
         </div>
-
-        {timeCapsuleMinted === false ? (
-          <div className="flex items-center justify-between pt-12">
-            {isMinting === false ? (
-              <>
-                <p className="text-black font-bold text-xl">1. </p>
-                <button className="btn btn-secondary" onClick={minNft}>
-                  Mint NFT
-                </button>
-              </>
-            ) : (
-              <div className="flex items-center justify-center">
-                <span className="loading loading-infinity loading-lg"></span>
-              </div>
-            )}
-            <>
-              {isCreatingCapsule === false ? (
-                <>
-                  <p className="text-black text-xl font-bold">2. </p>
-                  <button className="btn btn-primary" onClick={handleCreateCapsule}>
-                    Finalise Capsule
-                  </button>
-                </>
-              ) : (
-                <div className="flex items-center justify-center">
-                  <span className="loading loading-infinity loading-lg"></span>
-                </div>
-              )}
-            </>
-          </div>
-        ) : (
-          <div className="flex items-center justify-between pt-12">
-            <div>
-              <button className="btn btn-active btn-ghost btn-disabled">Minted</button>
+        <div className="pt-20">
+          {isCreatingCapsule === false ? (
+            <button className="btn btn-primary" onClick={handleCreateCapsule}>
+              Create Capsule
+            </button>
+          ) : (
+            <div className="flex items-center justify-center">
+              <span className="loading loading-infinity loading-lg"></span>
             </div>
-            {isCreatingCapsule === false ? (
-              <button className="btn btn-primary" onClick={handleCreateCapsule}>
-                Finalise Capsule
-              </button>
-            ) : (
-              <div className="flex items-center justify-center">
-                <span className="loading loading-infinity loading-lg"></span>
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
