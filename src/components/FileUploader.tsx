@@ -195,18 +195,21 @@ const FileUploader = () => {
           </div>
         </div>
       </div>
-      <label className="btn btn-outline absolute right-32 w-40 my-6 btn-primary">
-        <input
-          type="file"
-          accept=".mp4,.jpeg,.jpg,.gif,.webm,.mov"
-          multiple
-          onChange={handleFileSelect}
-          style={{ display: 'none' }}
-        />
-        Add Files
-      </label>
-      {/* <input onChange={e=>handleFileUpload(e.target.files)} type="file" /> */}
-      <button onClick={handleFileUpload}>Upload Files</button>
+      <div className="flex justify-center items-center pt-20">
+        <label className="btn btn-outline absolute right-32 w-40 my-6 btn-primary">
+          <input
+            type="file"
+            accept=".mp4,.jpeg,.jpg,.gif,.webm,.mov"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+          Add Files
+        </label>
+        <button className="btn btn-secondary" onClick={handleFileUpload}>
+          Upload Files
+        </button>
+      </div>
     </div>
   );
 };
