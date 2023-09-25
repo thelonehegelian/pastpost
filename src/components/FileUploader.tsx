@@ -4,7 +4,7 @@ import '../../styles/style.css';
 import lighthouse from '@lighthouse-web3/sdk';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/navigation';
-// BAD IDEA
+// BAD IDEA, process.env isn't working, no time to fix
 const API_KEY = 'de1443ca.854cd879e421475f935d4e74126035f7';
 
 const validFileTypes = [
@@ -21,11 +21,9 @@ const FileUploader = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [filesToUpload, setFilesToUpload] = useState<FileList | null>(null); // Initialize as null
-  const [cid, SetCid] = useState('');
   const [account, setAccount] = useState('');
   const [accounts, setAccounts] = useState([]);
   const router = useRouter();
-  console.log('something is going wrong');
   const connectMetamask = async () => {
     const { ethereum } = window;
 
