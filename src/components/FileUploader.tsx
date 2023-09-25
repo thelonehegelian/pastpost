@@ -5,7 +5,7 @@ import lighthouse from '@lighthouse-web3/sdk';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/navigation';
 // BAD IDEA, process.env isn't working, no time to fix
-const API_KEY = 'de1443ca.854cd879e421475f935d4e74126035f7';
+const API_KEY = process.env.LIGHTHOUSE_APIKEY || 'de1443ca.854cd879e421475f935d4e74126035f7';
 
 const validFileTypes = [
   'video/mp4',
