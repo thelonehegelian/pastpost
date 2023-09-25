@@ -347,9 +347,12 @@ export default function CreateCapsuleFormPage(): JSX.Element {
         {timeCapsuleMinted === false ? (
           <div className="flex items-center justify-between pt-12">
             {isMinting === false ? (
-              <button className="btn btn-primary" onClick={minNft}>
-                Mint NFT
-              </button>
+              <>
+                <p className="text-black font-bold text-xl">1. </p>
+                <button className="btn btn-secondary" onClick={minNft}>
+                  Mint NFT
+                </button>
+              </>
             ) : (
               <div className="flex items-center justify-center">
                 <span className="loading loading-infinity loading-lg"></span>
@@ -357,9 +360,12 @@ export default function CreateCapsuleFormPage(): JSX.Element {
             )}
             <>
               {isCreatingCapsule === false ? (
-                <button className="btn btn-primary" onClick={handleCreateCapsule}>
-                  Finalise Capsule
-                </button>
+                <>
+                  <p className="text-black text-xl font-bold">2. </p>
+                  <button className="btn btn-primary" onClick={handleCreateCapsule}>
+                    Finalise Capsule
+                  </button>
+                </>
               ) : (
                 <div className="flex items-center justify-center">
                   <span className="loading loading-infinity loading-lg"></span>
