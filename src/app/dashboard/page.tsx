@@ -12,7 +12,8 @@ import { Database } from '@tableland/sdk';
 
 export default function DashboardPage() {
   const [tableData, setTableData] = useState<PastPostTable[]>([]);
-  const tableName: string = 'pastpost_314159_362'; // Our pre-defined health check table
+  // oldTableName = 'pastpost_314159_362';
+  const tableName: string = 'pastpost_314159_430'; // Our pre-defined health check table
   const db = new Database();
 
   const register_job = async (cid: string) => {
