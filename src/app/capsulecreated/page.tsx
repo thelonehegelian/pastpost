@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 const page = () => {
   return (
+    <div className='bg-white h-screen pt-40 pr-60'>
     <div className="py-28 flex justify-center items-center relative">
       <div>
         <Image src={confettibox} alt="confetti" />
@@ -24,6 +25,7 @@ const page = () => {
           <button className="btn btn-primary">Create calendar event</button>
         </div>
       </div>
+    </div>
     </div>
   );
 };
