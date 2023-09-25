@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Database } from '@tableland/sdk';
 
-export function Dashboard() {
+export default function DashboardPage() {
   const [tableData, setTableData] = useState<PastPostTable[]>([]);
   const tableName: string = 'pastpost_314159_362'; // Our pre-defined health check table
   const db = new Database();
@@ -120,5 +120,3 @@ export function Dashboard() {
     </div>
   );
 }
-
-export default Dashboard;
