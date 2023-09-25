@@ -1,117 +1,103 @@
-'use client';
 
-import React from 'react';
-import { ethers } from 'ethers';
-import lighthouse from '@lighthouse-web3/sdk';
-import { useState } from 'react';
-function Home() {
-  const [cid, SetCid] = useState('');
-  const [account, setAccount] = useState('');
-  const [accounts, setAccounts] = useState([]);
-  const connectMetamask = async () => {
-    const { ethereum } = window;
+import { Account } from '../components/Account';
+import { Connect } from '../components/Connect';
+import { Connected } from '../components/Connected';
+import { Counter } from '../components/Counter';
+import { NetworkSwitcher } from '../components/NetworkSwitcher';
+import LandingPage from '../components/LandingPage';
 
-    if (!ethereum) {
-      alert('please install metamask');
-    }
-    if (ethereum) {
-      const walletAccounts = await ethereum.request({
-        method: 'eth_requestAccounts',
-      });
-      setAccounts(walletAccounts);
+import '../../styles/landingpage.css';
+import Link from 'next/link';
+import Image from 'next/image';
 
-      window.ethereum.on('chainChanged', () => {
-        window.location.reload();
-      });
+import { CSSProperties } from 'react';
 
-      window.ethereum.on('accountsChanged', () => {
-        window.location.reload();
-      });
-    }
-  };
+const bottomLeft: CSSProperties = {
+  position: 'absolute',
+  bottom: 125,
+  left: 165,
+  zIndex: 1,
+};
 
-  connectMetamask();
-  const encryptionSignature = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const messageRequested = (await lighthouse.getAuthMessage(address)).data.message;
-    const signedMessage = await signer.signMessage(messageRequested);
-    setAccount(accounts[0]);
-    return {
-      signedMessage: signedMessage,
-      publicKey: address,
-    };
-  };
+const handClock: CSSProperties = {
+  zIndex: 2,
+  position: 'relative',
+};
 
-  const progressCallback = (progressData) => {
-    let percentageDone = 100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
-    console.log(percentageDone);
-  };
-  // interface IUploadEncryptedResponse {
-  //   file: File;
-  //   key: string;
-  //   publicKey: string;
-  //   signedMessage: string;
-  //   additionalData?: any;
-  //   progressCallback?: (progress: number) => void;
-  // }
-  /* Deploy file along with encryption */
-  const uploadFileEncrypted = async (file) => {
-    /*
-       uploadEncrypted(e, accessToken, publicKey, signedMessage, uploadProgressCallback)
-       - e: js event
-       - accessToken: your API key
-       - publicKey: wallets public key
-       - signedMessage: message signed by the owner of publicKey
-       - dealParameters: default null
-       - uploadProgressCallback: function to get progress (optional)
-    */
-    const sig = await encryptionSignature();
-
-    const response = await lighthouse.uploadEncrypted(
-      file,
-      'de1443ca.854cd879e421475f935d4e74126035f7',
-      sig!.publicKey,
-      sig!.signedMessage,
-      undefined,
-      progressCallback,
-    );
-    console.log(response.data);
-    const { Hash } = response.data[0];
-    SetCid(Hash);
-    /*
-      output:
-        data: [{
-          Name: "c04b017b6b9d1c189e15e6559aeb3ca8.png",
-          Size: "318557",
-          Hash: "QmcuuAtmYqbPYmPx3vhJvPDi61zMxYvJbfENMjBQjq7aM3"
-        }]
-      Note: Hash in response is CID.
-    */
-  };
-
-  const handleCreateCapsule = async (e) => {
-    uploadFileEncrypted(e.target.files[0]);
-  };
-
+export default function page() {
   return (
-    <div className="bg-white h-screen">
-      <div className="text-center flex justify-center items-center mt-1">
-        <div>
-          {account !== '' ? (
-            <p>Connected Account: {account}</p>
-          ) : (
-            <button onClick={() => encryptionSignature()}>Connect Metmask</button>
-          )}
-        </div>
-        {cid}
-      </div>
-      <input onChange={(e) => handleCreateCapsule(e)} type="file" />
+    <>
+      <div className="container">
+        <div className="Navbar flex p-10 justify-center">
+          {/* Logo */}
+          <div className="flex-1">
+            <Image src="/logo.svg" alt="Logo" width={100} height={100} />
+          </div>
+          {/* Links container*/}
+          {/* TODO make a single component for links */}
+          <div className="flex-1 flex justify-center items-center">
+            <Link href="/createcapsule" className="flex justify-center text-black text-lg pr-8">
+              Create capsule
+            </Link>
 
-      <a href={`https://files.lighthouse.storage/viewFile/${cid}`}>View File</a>
-    </div>
+            <Link href="/about" className="flex justify-center text-black text-lg pl-8 pr-8">
+              About
+            </Link>
+
+            <Link href="/faqs" className="text-black text-lg pl-8">
+              FAQs
+            </Link>
+          </div>
+          {/* Connect Wallet */}
+          {/* TODO connect with wagmi */}
+          {/* TODO separate this button into a component */}
+          <div className="flex-1 flex justify-end items-center pr-8">
+            <button className="btn btn-primary">Connect Wallet</button>
+          </div>
+        </div>
+        <div className="Footer"></div>
+        <div className="Left pl-20">
+          <div className="flex-1"></div>
+          <div className="flex-1">
+            <div className="pl-40">
+              <h1 className="text-black text-5xl pb-4 font-medium">
+                The Greatest Way to remember the past
+              </h1>
+              <p className="text-gray-500">
+                Create a time capsule for you, friend and family. You will be able to set up when
+                and who can open this valuable chest
+              </p>
+            </div>
+          </div>
+          {/* buttons */}
+          <div className="flex-1 justify-center flex ">
+            <Link href="/createcapsule">
+              <button className="btn btn-active btn-primary mr-10">Create Capsule</button>
+            </Link>
+            <Link href="dashboard">
+              <button className="btn btn-outline text-gray-600">Open Capsule</button>
+            </Link>
+          </div>
+        </div>
+
+        <div className="Right relative">
+          <div className="p-20 flex justify-end">
+            <Image
+              style={handClock}
+              src="/handclock.svg"
+              alt="handclock"
+              width={500}
+              height={500}
+            />
+
+            <div style={bottomLeft}>
+              <Image src="/dottedSquare.svg" alt="dottedSquare" width={50} height={50} />
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </>
   );
 }
 
-export default Home;
