@@ -13,7 +13,7 @@ import { Database } from '@tableland/sdk';
 export default function DashboardPage() {
   const [tableData, setTableData] = useState<PastPostTable[]>([]);
   // oldTableName = 'pastpost_314159_362';
-  const tableName: string = 'pastpost_314159_430'; // Our pre-defined health check table
+  const tableName: string = 'pastpost_314159_362'; // Our pre-defined health check table
   const db = new Database();
 
   const register_job = async (cid: string) => {
@@ -59,6 +59,7 @@ export default function DashboardPage() {
   const [cid, setCid] = useState('');
 
   const handleAcceptance = async () => {
+    console.log('registering job');
     const raas = await register_job(cid);
     if (raas.status === 201) {
       setJob(!job);
@@ -100,11 +101,11 @@ export default function DashboardPage() {
         <div className="flex-1">
           <div className="bg-white drop-shadow-md p-4 m-12 h-5/10 w-5/10 flex flex-col rounded-xl">
             <div className="text-2xl font-bold ml-8 ">Recent Time Capsule</div>
-            <ListCapsules />
+            <ListCapsules received={false} raasWorkers={handleAcceptance} />
           </div>
           <div className="bg-white drop-shadow-md p-4 m-12 h-5/10 w-5/10 flex flex-col rounded-xl">
             <div className="text-2xl font-bold ml-8 ">Received Capsule</div>
-            <ListCapsules />
+            <ListCapsules received={true} raasWorkers={handleAcceptance} />
           </div>
         </div>
         <div className="flex mr-8">
@@ -115,7 +116,6 @@ export default function DashboardPage() {
         </div>
         {/* TODO should update based on job status */}
         {/* NOTE this basically means that the time capsule receiver is accepting that they agree to pay for the RAAS service and that it would be worthwhile */}
-        <button onClick={handleAcceptance}>Accept?</button>
         <button onClick={getTableResults}>Get Table Results</button>
       </div>
     </div>
