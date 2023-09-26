@@ -17,7 +17,7 @@ contract PastPost is Ownable, ERC721Holder {
     struct Capsule {
         address sender;        
         address receiver;
-        address nftContract;
+        address nft;
         uint unlockTime;
     }
 
@@ -41,17 +41,13 @@ contract PastPost is Ownable, ERC721Holder {
         );
     }
 
-    function tableName() external view returns (string memory) {
-        return SQLHelpers.toNameFromId(TABLE_PREFIX, tableId);
-    }
-
-    function createTimeCapsule(address _receiver, uint _unlockTime, string[] memory _rows) public returns(address) {
+    function createTimeCapsule(address _receiver, uint _unlockTime, string[] memory _cids) public returns(address) {
         NFTContract nft = new NFTContract();
         userNftContracts[msg.sender].push(address(nft));
         Capsule memory newCapsule = Capsule({
             sender: msg.sender, 
             receiver: _receiver,
-            nftContract: address(nft),
+            nft: address(nft),
             unlockTime: _unlockTime
         });
         timeCapsules.push(newCapsule);
@@ -59,20 +55,40 @@ contract PastPost is Ownable, ERC721Holder {
         nft.safeMint(_receiver, uri);
         nft.transferOwnership(msg.sender);
 
+        string[] memory values = getValues(newCapsule, _cids);
+
         TablelandDeployments.get().mutate(
             address(this),
             tableId,
             SQLHelpers.toBatchInsert(
                 TABLE_PREFIX,
                 tableId,
-                "sender,receiver,nft,unlockTime,cid",
-                _rows
+                "sender,receiver,nft,unlockTime,cid", 
+                values
             )
         );
 
         emit TimeCapsuleCreated(msg.sender, _receiver, address(nft), _unlockTime);
 
         return address(nft);
+    }
+ 
+    function getValues(Capsule memory _capsule, string[] memory _cids) public pure returns (string[] memory) {
+        string[] memory batchValue = new string[](_cids.length);
+        for (uint i = 0; i < _cids.length; i++) {
+            batchValue[i] = string(abi.encodePacked(
+                SQLHelpers.quote(Strings.toHexString(_capsule.sender)),",",
+                SQLHelpers.quote(Strings.toHexString(_capsule.receiver)),",",
+                SQLHelpers.quote(Strings.toHexString(_capsule.nft)),",",
+                SQLHelpers.quote(Strings.toString(_capsule.unlockTime)),",",
+                SQLHelpers.quote(_cids[i])
+            ));
+        }
+        return batchValue;
+    }
+
+    function tableName() external view returns (string memory) {
+        return SQLHelpers.toNameFromId(TABLE_PREFIX, tableId);
     }
 
     function setURI(string memory _uri) public onlyOwner {
