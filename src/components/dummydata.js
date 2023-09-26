@@ -13,7 +13,7 @@ const small = [
   },
   {
     image: text,
-    cid: '0xAbCdEf0123456789',
+    cid: 'QmZiHKCP6iYMnZKH2cCYBdc8zM3NgTHcWz1UkNSh9Lt3ZZ',
     text: '1 Object.',
     button: {
       options: ['created', 'draft'],
