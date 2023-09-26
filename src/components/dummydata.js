@@ -5,7 +5,7 @@ import image from '../../public/3cmp.svg';
 const small = [
   {
     image: video,
-    wallet_id: '0xAbCdEf0123456789',
+    cid: '0xAbCdEf0123456789',
     text: '24 Pictures',
     button: {
       options: ['created', 'draft'],
@@ -13,7 +13,7 @@ const small = [
   },
   {
     image: text,
-    wallet_id: '0xAbCdEf0123456789',
+    cid: '0xAbCdEf0123456789',
     text: '1 Object.',
     button: {
       options: ['created', 'draft'],
@@ -21,7 +21,7 @@ const small = [
   },
   {
     image: image,
-    wallet_id: '0xAbCdEf0123456789',
+    cid: "Qmd7rKHH8ANyE92sZVUsXCP7bqMFjrNJm4RZLZD3uRAiLF",
     text: '2 Audio + 4 Images',
     button: {
       options: ['created', 'draft'],
