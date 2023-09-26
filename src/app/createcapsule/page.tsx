@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import estimateFutureBlockNumber from '../../helpers/blockEstimator';
-
+import { BigNumber } from 'ethers';
 interface ICapsuleInformation {}
 
 export default function CreateCapsuleFormPage(): JSX.Element {
@@ -30,9 +30,14 @@ export default function CreateCapsuleFormPage(): JSX.Element {
   const [isCreatingCapsule, setIsCreatingCapsule] = useState(false);
 
   // TODO move this to constants
-  const contractABI = ['function createTimeCapsule(address) public returns (address)'];
+  const contractABI = [
+    'function createTimeCapsule(address,uint256,string) public returns (address)',
+  ];
   // TODO move to constants
-  const timeCapsuleContractAddress = '0x9f60b966e8A854d4158D804a8B052fd5EeF401e3';
+
+  // updated contract address : 0xB594DA7542DE39E64518673F38BF25a085409249
+  // createTimeCapsule(address,uint256,string)
+  const timeCapsuleContractAddress = '0xB594DA7542DE39E64518673F38BF25a085409249';
 
   const mintNft = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -43,7 +48,8 @@ export default function CreateCapsuleFormPage(): JSX.Element {
       setIsMinting(true);
       console.log('minting nft');
       const nftReceiver = receiverAddress;
-      const transaction = await contract.createTimeCapsule(nftReceiver);
+      const timestamp = BigNumber.from(Date.now());
+      const transaction = await contract.createTimeCapsule(nftReceiver, timestamp, cid);
       // TODO update nft address
 
       console.log(transaction);
