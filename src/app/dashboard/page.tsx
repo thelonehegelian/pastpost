@@ -7,15 +7,8 @@ import ListCapsules from '../../components/ListCapsules';
 import FriendsCapsule from '../../components/FriendsCapsule';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Database } from '@tableland/sdk';
 
 export default function DashboardPage() {
-  const [tableData, setTableData] = useState<PastPostTable[]>([]);
-  // oldTableName = 'pastpost_314159_362';
-  const tableName: string = 'pastpost_314159_449'; // Our pre-defined health check table
-  const db = new Database();
-
   const register_job = async (cid: string) => {
     const formData = new FormData();
     const requestReceivedTime = new Date();
@@ -39,20 +32,6 @@ export default function DashboardPage() {
     );
     return response;
   };
-
-  interface PastPostTable {
-    timeCapsuleAddress: string;
-    cid: string;
-    id: number;
-  }
-  const getTableResults = async () => {
-    const { results } = await db.prepare(`SELECT * FROM ${tableName};`).all();
-    console.log(results);
-  };
-  useEffect(() => {
-    getTableResults();
-    console.log(tableData);
-  }, [tableData]);
 
   const [job, setJob] = useState(false);
   // TODO get this from Tableland
@@ -114,9 +93,6 @@ export default function DashboardPage() {
             <FriendsCapsule />
           </div>
         </div>
-        {/* TODO should update based on job status */}
-        {/* NOTE this basically means that the time capsule receiver is accepting that they agree to pay for the RAAS service and that it would be worthwhile */}
-        <button onClick={getTableResults}>Get Table Results</button>
       </div>
     </div>
   );
