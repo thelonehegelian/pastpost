@@ -48,8 +48,8 @@ export default function CreateCapsuleFormPage(): JSX.Element {
       setIsMinting(true);
       console.log('minting nft');
       const nftReceiver = receiverAddress;
-      const timestamp = BigNumber.from(Date.now());
-      const transaction = await contract.createTimeCapsule(nftReceiver, timestamp, cid);
+      const unixTimestamp = BigNumber.from(Date.parse(date) / 1000);
+      const transaction = await contract.createTimeCapsule(nftReceiver, unixTimestamp, cid);
       // TODO update nft address
 
       console.log(transaction);
