@@ -10,7 +10,7 @@ In a world where memories are often confined to traditional photo albums or scat
 
 We invite you to be a part of this revolutionary way of preserving memories. Dive into the future of memory preservation, where blockchain meets sentimentality. Your participation can shape the evolution of PastPost and how we connect with our past selves. Contribute, engage, and create lasting memories with PastPost!
 
-🌐 Visit our website: [https://www.pastpostapp.com]([https://www.pastpostapp.com](https://pastpost0.netlify.app/))
+🌐 Visit our website: https://pastpost0.netlify.app/
 
 🖼 Figma Design: https://www.figma.com/file/5N0HfSTAbYVFucjJGN4wDm/Untitled?type=design&node-id=14%3A901&mode=design&t=bfAor2erVecJbpVY-1
 
